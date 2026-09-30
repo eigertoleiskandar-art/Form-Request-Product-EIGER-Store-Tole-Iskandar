@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORM REQUEST PRODUCT</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff', 100: '#e0effe', 300: '#93c5fd', 400: '#60a5fa', 500: '#2563eb',
+                            600: '#1d4ed8', 700: '#1e40af', 800: '#1e3a8a', 900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Roboto Mono"', 'monospace'],
+                        mono: ['"Roboto Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <style>
+        body { 
+            font-family: 'Roboto Mono', monospace; 
+            overflow-x: hidden; width: 100%; margin: 0; 
+            background-color: #f8fafc; font-size: 13px; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+            text-rendering: optimizeLegibility;
+            font-weight: 600;
+            will-change: transform;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        .modern-select {
+            background-color: #f8fafc;
+            background-image: linear-gradient(to bottom, #ffffff, #f1f5f9);
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+        .modern-select:hover { border-color: #93c5fd; }
+        .modern-select:focus {
+            outline: none; border-color: #3b82f6; 
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); background-image: none; background-color: #ffffff;
+        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-3px); } 100% { transform: translateY(0px); } }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        body:not(.admin-mode) .admin-only { display: none !important; }
+        
+        .btn-view-all-active {
+            background-color: #dbeafe !important;
+            color: #1e3a8a !important;
+            border-color: #93c5fd !important;
+            box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05) !important;
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800 w-full relative">
+
+    <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md w-full">
+        <div class="w-full px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <button onclick="toggleSidebar()" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition-colors flex items-center justify-center relative shrink-0">
+                        <i class="fa-solid fa-bars text-sm"></i>
+                        <span id="menuNotificationLamp" class="hidden absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500 border-2 border-slate-900"></span>
+                        </span>
+                    </button>
+                    <div class="flex items-center space-x-2.5 overflow-hidden">
+                        <div onclick="handleRobotClick()" class="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white font-black text-sm shadow-md shrink-0 cursor-pointer select-none">
+                            <i class="fa-solid fa-robot animate-float"></i>
+                        </div>
+                        <div class="overflow-hidden flex flex-col justify-center">
+                            <h1 class="text-[11px] sm:text-xs font-black leading-tight tracking-wide truncate">7049-EIGER STORE TOLE ISKANDAR</h1>
+                            <span class="text-[9px] sm:text-[10px] text-brand-300 font-bold tracking-wide truncate block mt-0.5">Form Request Product</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 hidden transition-opacity duration-150 opacity-0"></div>
+    <aside id="sidebarDrawer" class="fixed top-0 left-0 bottom-0 w-64 bg-slate-900 text-white z-50 transform -translate-x-full transition-transform duration-150 ease-in-out shadow-2xl flex flex-col justify-between">
+        <div>
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-sky-400 to-blue-600 flex items-center justify-center text-white font-black shadow-lg shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <h2 class="font-black text-xs leading-tight">7049-EIGER TOLE</h2>
+                        <span id="sidebarModeStatus" class="text-[10px] bg-brand-900 text-brand-200 px-2 py-0.5 rounded border border-brand-700 mt-1 inline-block font-black"><i class="fa-solid fa-user text-[9px]"></i> Tamu Aktif</span>
+                    </div>
+                </div>
+                <button onclick="toggleSidebar()" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors shrink-0">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-4 space-y-2">
+                <p class="px-2 text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Navigasi Utama</p>
+                <button onclick="switchTab('input')" id="nav-input" class="nav-btn w-full px-3 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-between bg-brand-600 text-white shadow-md">
+                    <div class="flex items-center gap-2.5"><i class="fa-solid fa-pen-to-square w-4 text-center"></i><span>Form Input</span></div>
+                </button>
+                <button onclick="switchTab('daftar')" id="nav-daftar" class="nav-btn w-full px-3 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-between text-slate-300 hover:text-white hover:bg-slate-800">
+                    <div class="flex items-center gap-2.5"><i class="fa-solid fa-list-check w-4 text-center"></i><span>Data Input</span></div>
+                    <span id="badge-total-requests" class="bg-rose-500 text-white text-[10px] px-2 py-0.5 rounded-full font-black hidden shadow-md border border-slate-900">0</span>
+                </button>
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full px-3 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-between text-slate-300 hover:text-white hover:bg-slate-800">
+                    <div class="flex items-center gap-2.5"><i class="fa-solid fa-chart-pie w-4 text-center"></i><span>DASHBOARD</span></div>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <div id="toast-container" class="fixed top-16 right-3 left-3 sm:left-auto sm:right-5 z-[100] flex flex-col gap-2 pointer-events-none"></div>
+
+    <main class="flex-1 w-full px-3 sm:px-6 lg:px-8 py-5 overflow-x-hidden">
+        
+        <section id="tab-input" class="tab-content w-full space-y-5">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all w-full">
+                <div class="bg-slate-900 p-3 text-white border-b border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <h2 class="text-xs sm:text-sm font-black flex items-center gap-2">
+                        <i class="fa-solid fa-file-circle-plus text-brand-500"></i> Form Input Permintaan
+                    </h2>
+                    <div class="flex bg-slate-800 p-1 rounded-full shadow-inner border border-slate-700 w-full sm:w-auto relative items-center">
+                        <button type="button" onclick="setFormType('reguler')" id="btnFormReguler" class="flex-1 sm:flex-none px-3 py-1 text-xs font-black rounded-full bg-brand-600 text-white shadow transition-all duration-150"><i class="fa-solid fa-box-archive mr-1"></i> Retur / EA</button>
+                        <button type="button" onclick="setFormType('custTole')" id="btnFormCustTole" class="flex-1 sm:flex-none px-3 py-1 text-xs font-black rounded-full text-slate-400 hover:text-slate-200 transition-all duration-150 bg-transparent"><i class="fa-solid fa-user-tag mr-1"></i> Req Cust</button>
+                    </div>
+                </div>
+
+                <form id="requestForm" class="p-4 sm:p-5" onsubmit="handleFormSubmit(event)">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                        <div class="xl:col-span-5 space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                                <div class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px] font-black shadow-md">1</div>
+                                <h3 class="font-black text-xs text-slate-800">Input Permintaan Retur / EA</h3>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">Kode Site <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="text" id="inputKodeSite" required autocomplete="off" spellcheck="false" placeholder="Input Site" oninput="onKodeSiteChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500/30 text-xs font-black uppercase shadow-inner">
+                                    <span id="siteMatchBadge" class="hidden absolute right-3 top-2 text-sm text-emerald-600"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">SKU Code <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="text" id="inputSkuCode" required autocomplete="off" spellcheck="false" placeholder="Input SKU" oninput="onSkuCodeChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500/30 text-xs font-black uppercase shadow-inner">
+                                    <span id="skuMatchBadge" class="hidden absolute right-3 top-2 text-sm text-emerald-600"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">Tujuan <span class="text-rose-500">*</span></label>
+                                    <select id="inputTujuan" onchange="onTujuanChange()" required class="modern-select w-full px-2.5 py-2 rounded-lg text-xs font-black cursor-pointer">
+                                        <option value="" disabled selected hidden>Pilih...</option>
+                                        <option value="Retur">📦 Retur</option>
+                                        <option value="Endless Aisle">🛒 Endless Aisle</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">Pengiriman <span class="text-rose-500">*</span></label>
+                                    <select id="inputPengiriman" onchange="onPengirimanChange()" required class="modern-select w-full px-2.5 py-2 rounded-lg text-xs font-black cursor-pointer">
+                                        <option value="" disabled selected hidden>Pilih...</option>
+                                        <option value="CSS JNE">🚚 CSS JNE</option>
+                                        <option value="J&T">📦 J&T</option>
+                                        <option value="SPX">⚡ SPX</option>
+                                        <option value="Pickup RA">🏪 Pickup RA</option>
+                                        <option value="Pickup Cust">🧑‍🤝‍‍🧑 Pickup Cust</option>
+                                        <option value="Gosend">🛵 Gosend</option>
+                                        <option value="Grab">🚗 Grab</option>
+                                        <option value="Lalamove">🚐 Lalamove</option>
+                                        <option value="Lainnya">❓ Lainnya (Wajib Konfirmasi)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">Qty <span class="text-rose-500">*</span></label>
+                                <input type="number" id="inputQty" required min="1" placeholder="0" oninput="calculateTotals()" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500/30 text-xs font-black shadow-inner">
+                            </div>
+                        </div>
+
+                        <div class="xl:col-span-7 space-y-4 bg-gradient-to-b from-sky-50 to-blue-50 p-4 rounded-xl border border-sky-200 shadow-inner flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 border-b border-sky-200">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px] font-black shadow-md">2</div>
+                                        <h3 class="font-black text-xs text-slate-800">Detail Data</h3>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3 bg-white/90 p-3.5 rounded-lg border border-sky-100 mt-2 shadow-sm text-xs">
+                                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pb-3 border-b border-slate-200">
+                                        <div class="sm:col-span-3">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-store text-sky-500"></i> Kode Site</label>
+                                            <div id="respDetailKodeSite" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-mono font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-5">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5">Site Name</label>
+                                            <div id="respDetailSiteName" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-code-branch text-sky-500"></i> Branch</label>
+                                            <div id="respDetailBranch" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pb-3 border-b border-slate-200">
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-barcode text-sky-500"></i> SKU Code</label>
+                                            <div id="respSkuCodeDisplay" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-mono font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-8">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5">SKU Description</label>
+                                            <div id="respSkuDesc" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words leading-tight">--</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                        <div class="sm:col-span-1">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-layer-group text-sky-500"></i> MC Lvl 4</label>
+                                            <div id="respMcLevel" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-1">
+                                            <label class="block text-[10px] font-black text-brand-700 uppercase mb-0.5"><i class="fa-solid fa-cubes"></i> Qty</label>
+                                            <div id="respQtySubmit" class="px-2 py-1.5 rounded bg-slate-50 border border-brand-200 font-black text-brand-800 text-center text-sm">--</div>
+                                        </div>
+                                        <div class="sm:col-span-1">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-bullseye text-sky-500"></i> Tujuan</label>
+                                            <div id="respTujuanSubmit" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-1">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-paper-plane text-sky-500"></i> Pengiriman</label>
+                                            <div id="respPengirimanSubmit" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 space-y-3">
+                                <div class="bg-white/90 p-3 rounded-lg border border-sky-100 space-y-2 shadow-sm">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-slate-500 font-black uppercase"><i class="fa-solid fa-tag"></i> Harga Satuan:</span>
+                                        <span id="respHargaSatuan" class="font-black text-slate-800 bg-slate-100 px-2 py-1 rounded border border-slate-200">Rp 0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+                                        <span class="text-xs font-black text-slate-800 uppercase"><i class="fa-solid fa-money-bill-wave text-emerald-600"></i> Total Harga:</span>
+                                        <span id="respTotalHarga" class="text-emerald-700 font-black text-base bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">Rp 0</span>
+                                    </div>
+                                </div>
+                                <button type="submit" id="btnSubmitForm" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-lg shadow-md transition-all text-sm flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> SUBMIT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form id="custToleForm" class="p-4 sm:p-5 hidden" onsubmit="handleCustToleSubmit(event)">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+                        <div class="xl:col-span-5 space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                                <div class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px] font-black shadow-md">1</div>
+                                <h3 class="font-black text-xs text-slate-800">Input Permintaan Req Cust</h3>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">SKU Code <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input type="text" id="inputCustSkuCode" required autocomplete="off" spellcheck="false" placeholder="Input SKU" oninput="onSkuCodeCustChange()" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500/30 text-xs font-black uppercase shadow-inner">
+                                    <span id="custSkuMatchBadge" class="hidden absolute right-3 top-2 text-sm text-emerald-600"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">Qty <span class="text-rose-500">*</span></label>
+                                <input type="number" id="inputCustQty" required min="1" placeholder="0" oninput="calculateCustTotals()" class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500/30 text-xs font-black shadow-inner">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-black text-slate-700 uppercase mb-1">Keterangan <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                                <textarea id="inputCustKeterangan" rows="2.5" placeholder="Catatan permintaan atau info customer..." class="w-full px-3 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500/30 text-xs font-bold resize-none shadow-inner"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="xl:col-span-7 space-y-4 bg-gradient-to-b from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-200 shadow-inner flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between pb-2 border-b border-indigo-200">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[10px] font-black shadow-md">2</div>
+                                        <h3 class="font-black text-xs text-slate-800">Detail Produk Customer</h3>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 bg-white/90 p-3.5 rounded-lg border border-indigo-100 mt-2 shadow-sm text-xs">
+                                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pb-3 border-b border-slate-200">
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-barcode text-indigo-400"></i> SKU Code</label>
+                                            <div id="respCustSku" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-mono font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-8">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5">SKU Description</label>
+                                            <div id="respCustDesc" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words leading-tight">--</div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                                        <div class="sm:col-span-4">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-layer-group text-indigo-400"></i> MC Lvl 4</label>
+                                            <div id="respCustMcLevel" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-5">
+                                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-0.5"><i class="fa-solid fa-boxes-stacked text-indigo-400"></i> Bin Code</label>
+                                            <div id="respCustBin" class="px-2 py-1.5 rounded bg-slate-50 border border-slate-200 font-mono font-black text-slate-500 break-words">--</div>
+                                        </div>
+                                        <div class="sm:col-span-3">
+                                            <label class="block text-[10px] font-black text-indigo-700 uppercase mb-0.5"><i class="fa-solid fa-cubes"></i> Qty</label>
+                                            <div id="respCustQty" class="px-2 py-1.5 rounded bg-slate-50 border border-indigo-200 font-black text-indigo-800 text-center text-sm">--</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <button type="submit" id="btnSubmitCustForm" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-lg shadow-md transition-all text-sm flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> SUBMIT
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="tab-daftar" class="tab-content hidden space-y-4 w-full">
+            <div class="bg-slate-200/80 p-1.5 rounded-full shadow-inner flex flex-col sm:flex-row items-center justify-center gap-1.5 mb-3 w-full sm:w-fit mx-auto border border-slate-300">
+                <button onclick="setDataInputTab('retur')" id="btnTabRetur" class="w-full sm:w-auto relative px-5 py-1.5 text-xs font-black rounded-full bg-brand-600 text-white shadow-md transition-all duration-150 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-box-archive"></i> Retur/EA
+                    <span id="badge-tab-retur" class="hidden absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-md border border-white">0</span>
+                </button>
+                <button onclick="setDataInputTab('cust')" id="btnTabCust" class="w-full sm:w-auto relative px-5 py-1.5 text-xs font-black rounded-full text-slate-600 hover:text-slate-800 bg-transparent transition-all duration-150 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-user-tag"></i> Req Cust
+                    <span id="badge-tab-cust" class="hidden absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full shadow-md border border-white">0</span>
+                </button>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3 w-full">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-3">
+                    <div class="relative w-full lg:w-1/2">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                        <input type="text" id="searchRequests" oninput="renderRequestCards()" placeholder="Cari SKU, Nama Toko, Status..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-brand-500/30 font-bold bg-slate-50 focus:bg-white shadow-inner">
+                    </div>
+                    <div class="relative group w-full lg:w-64">
+                        <select id="filterStatus" onchange="renderRequestCards()" class="modern-select w-full px-3 py-2 rounded-lg text-xs font-black cursor-pointer bg-white">
+                            <option value="ALL">🔍 Semua Status</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-calendar-days absolute left-3 top-2.5 text-brand-600 text-sm"></i>
+                        <input type="text" id="dateRangeFilter" placeholder="Rentang Tanggal..." class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-xs font-black cursor-pointer shadow-inner bg-slate-50 focus:bg-white">
+                    </div>
+                    <div class="flex items-center gap-2 w-full sm:w-auto ml-auto">
+                        <button onclick="resetDateFilter()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-black rounded-lg text-xs transition-colors flex-1 sm:flex-none border border-slate-200 shadow-sm">
+                            <i class="fa-solid fa-rotate-right"></i> Reset
+                        </button>
+                        <button onclick="toggleViewAll()" id="btnViewAll" class="px-4 py-2 bg-brand-100 hover:bg-brand-200 text-brand-800 font-black rounded-lg text-xs transition-colors flex-1 sm:flex-none shadow-sm border border-brand-200">
+                            <i class="fa-solid fa-list-ul"></i> View All
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs font-black text-slate-500 px-1">
+                <span id="requestsCountLabel">0 Permintaan Belum Diproses</span>
+            </div>
+            
+            <div id="adminWarningBanner" class="hidden w-full mb-1 mt-2"></div>
+            
+            <div id="requestsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full"></div>
+        </section>
+
+        <section id="tab-dashboard" class="tab-content hidden space-y-5 w-full">
+            <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-indigo-900 rounded-xl p-5 text-white shadow-lg relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-base sm:text-lg font-black flex items-center gap-2"><i class="fa-solid fa-chart-line text-brand-400"></i> DASHBOARD</h2>
+                    <p class="text-[11px] text-slate-300 font-bold mt-0.5">Ringkasan statistik & performa operasional</p>
+                </div>
+                <button onclick="openMasterModal()" class="admin-only px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-black rounded-lg shadow border border-white/20 flex items-center gap-2 backdrop-blur-md transition-all">
+                    <i class="fa-solid fa-database text-brand-300"></i> Update Master
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 w-full">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center">
+                    <p class="text-[11px] font-black text-slate-500 uppercase flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-slate-400"></i> Total Permintaan</p>
+                    <h3 id="dash-total-count" class="text-xl sm:text-2xl font-black text-slate-800 mt-1.5">0</h3>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center border-l-4 border-l-rose-500">
+                    <p class="text-[11px] font-black text-rose-600 uppercase flex items-center gap-1.5"><i class="fa-solid fa-box-archive"></i> Total Retur</p>
+                    <h3 id="dash-retur-total" class="text-sm font-black text-slate-800 mt-1.5 break-words">Rp 0</h3>
+                    <p id="dash-retur-count" class="text-[11px] font-black text-slate-500 mt-1">0 Req</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center border-l-4 border-l-blue-500">
+                    <p class="text-[11px] font-black text-blue-600 uppercase flex items-center gap-1.5"><i class="fa-solid fa-cart-shopping"></i> Total Endless Aisle</p>
+                    <h3 id="dash-ea-total" class="text-sm font-black text-slate-800 mt-1.5 break-words">Rp 0</h3>
+                    <p id="dash-ea-count" class="text-[11px] font-black text-slate-500 mt-1">0 Req</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center border-l-4 border-l-purple-500">
+                    <p class="text-[11px] font-black text-purple-600 uppercase flex items-center gap-1.5"><i class="fa-solid fa-user-tag"></i> Total Req Cust</p>
+                    <h3 id="dash-cust-total" class="text-sm font-black text-slate-800 mt-1.5 break-words">Rp 0</h3>
+                    <p id="dash-cust-count" class="text-[11px] font-black text-slate-500 mt-1">0 Req</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-amber-500 flex flex-col justify-center">
+                    <p class="text-[11px] font-black text-slate-500 uppercase flex items-center gap-1.5"><i class="fa-solid fa-hourglass-half text-amber-500"></i> Menunggu Proses</p>
+                    <h3 id="dash-waiting-count" class="text-xl sm:text-2xl font-black text-amber-600 mt-1.5">0</h3>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm border-b-4 border-b-rose-500 flex flex-col justify-between relative">
+                    <div>
+                        <p class="text-[11px] font-black text-slate-500 uppercase flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Peringatan Status</p>
+                        <h3 id="dash-warning-count" class="text-xl sm:text-2xl font-black text-rose-600 mt-1.5">0</h3>
+                        <div class="flex gap-2 mt-1 text-[10px] font-bold text-slate-500">
+                            <span id="dash-warning-retur">Retur: 0</span> <span class="text-slate-300">|</span> <span id="dash-warning-ea">EA: 0</span>
+                        </div>
+                    </div>
+                    <button onclick="openWarningModal()" class="absolute bottom-3 right-3 text-[10px] font-black bg-rose-50 hover:bg-rose-100 text-rose-600 px-2.5 py-1 rounded-md border border-rose-200 transition-colors shadow-sm">Detail <i class="fa-solid fa-arrow-right ml-0.5"></i></button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full mt-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                    <h3 class="font-black text-xs text-slate-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-bar text-emerald-600"></i> Performa Progres Status Permintaan</h3>
+                    <div class="h-52 relative w-full"><canvas id="chartStatusPerformance"></canvas></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                    <h3 class="font-black text-xs text-slate-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-truck-fast text-orange-500"></i> Statistik Pengiriman</h3>
+                    <div class="h-52 relative w-full"><canvas id="chartPengiriman"></canvas></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                    <h3 class="font-black text-xs text-slate-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left text-rose-500"></i> Rata-rata Waktu Proses Permintaan Produk</h3>
+                    <div class="h-52 relative w-full"><canvas id="chartAvgTime"></canvas></div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+                <h3 class="font-black text-xs text-slate-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-shop text-brand-600"></i> Top Site Request</h3>
+                <div class="overflow-x-auto custom-scrollbar w-full">
+                    <table class="w-full text-left text-[11px] min-w-[700px]">
+                        <thead class="bg-slate-50 text-slate-500 uppercase font-black border-b border-slate-200">
+                            <tr>
+                                <th class="p-2.5">Rank</th>
+                                <th class="p-2.5">Kode Site</th>
+                                <th class="p-2.5">Site Name</th>
+                                <th class="p-2.5">Branch</th>
+                                <th class="p-2.5 text-right">Total Qty</th>
+                                <th class="p-2.5 text-right">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dash-top-site-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-black text-xs text-slate-800 flex items-center gap-2"><i class="fa-solid fa-fire text-orange-500"></i> Top SKU Retur & EA</h3>
+                    <button onclick="openSkuModal('retur')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-brand-700 text-[11px] font-black rounded-lg border border-slate-200 shadow-sm transition-colors"><i class="fa-solid fa-expand mr-1"></i> Detail</button>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar w-full">
+                    <table class="w-full text-left text-[11px] min-w-[850px]">
+                        <thead class="bg-slate-50 text-slate-500 uppercase font-black border-b border-slate-200">
+                            <tr>
+                                <th class="p-2.5">Rank</th>
+                                <th class="p-2.5">SKU Code</th>
+                                <th class="p-2.5 min-w-[200px]">Description</th>
+                                <th class="p-2.5">MC Lvl 4</th>
+                                <th class="p-2.5 text-center">Bin Code</th>
+                                <th class="p-2.5 text-right">Total Qty</th>
+                                <th class="p-2.5 text-right">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dash-top-sku-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-black text-xs text-slate-800 flex items-center gap-2"><i class="fa-solid fa-users text-purple-500"></i> Top SKU Req Cust</h3>
+                    <button onclick="openSkuModal('cust')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-purple-700 text-[11px] font-black rounded-lg border border-slate-200 shadow-sm transition-colors"><i class="fa-solid fa-expand mr-1"></i> Detail</button>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar w-full">
+                    <table class="w-full text-left text-[11px] min-w-[850px]">
+                        <thead class="bg-slate-50 text-slate-500 uppercase font-black border-b border-slate-200">
+                            <tr>
+                                <th class="p-2.5">Rank</th>
+                                <th class="p-2.5">SKU Code</th>
+                                <th class="p-2.5 min-w-[200px]">Description</th>
+                                <th class="p-2.5">MC Lvl 4</th>
+                                <th class="p-2.5 text-center">Bin Code</th>
+                                <th class="p-2.5 text-right">Total Qty</th>
+                                <th class="p-2.5 text-right">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dash-top-sku-cust-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="detailModal" class="fixed inset-0 z-[60] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden transform transition-all max-h-[90vh] flex flex-col scale-95 opacity-0" id="detailModalContent">
+            <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
+                <h3 class="font-black text-sm flex items-center gap-2"><i class="fa-solid fa-clipboard-list text-brand-500"></i> Pemrosesan Status</h3>
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white rounded-lg p-1 transition-colors"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 space-y-4 overflow-y-auto custom-scrollbar flex-1 bg-slate-50">
+                
+                <div class="bg-slate-900 text-white p-4 rounded-xl space-y-3 relative shadow-md">
+                    <div class="flex items-start justify-between border-b border-slate-700 pb-2.5 relative z-10 flex-col sm:flex-row gap-2">
+                        <span class="text-brand-400 font-black text-xs flex items-center gap-1.5"><i class="fa-solid fa-tag"></i> Detail Produk & Inventory</span>
+                        <span id="mBinCode" class="bg-amber-500 text-slate-950 font-black px-2.5 py-1 rounded text-[11px] shadow break-words"><i class="fa-solid fa-boxes-stacked"></i> BIN: --</span>
+                    </div>
+                    <div class="space-y-1 relative z-10">
+                        <p class="text-slate-400 text-[11px] font-black uppercase">SKU Code & Desc</p>
+                        <div class="font-black text-sm text-white leading-relaxed break-words">
+                            <span id="mSkuCode" class="text-amber-400 font-mono bg-slate-800 px-2 py-0.5 rounded border border-slate-700 mr-1.5 mb-1 inline-block">--</span> <span id="mSkuDesc">--</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 pt-2.5 border-t border-slate-700/50 text-xs">
+                        <div><span class="text-slate-400 block text-[10px] font-black uppercase"><i class="fa-solid fa-layer-group"></i> MC Level 4:</span><p id="mMcLevel" class="font-black text-slate-200 text-xs break-words">--</p></div>
+                        <div id="mHargaSatuanBox"><span class="text-slate-400 block text-[10px] font-black uppercase"><i class="fa-solid fa-money-bill-1-wave"></i> Harga Satuan:</span><p id="mHargaSatuan" class="font-black text-slate-200 text-xs break-words">--</p></div>
+                    </div>
+                    <div class="flex justify-between pt-3 border-t border-slate-700 bg-slate-800/50 -mx-4 -mb-4 px-4 py-2.5 text-xs">
+                        <span class="font-bold text-slate-300">Jumlah: <span id="mQty" class="text-white font-black text-sm">0</span></span>
+                        <span id="mTotalHargaBox" class="font-bold text-emerald-400">Total: <span id="mTotalHarga" class="font-black text-sm break-words">Rp 0</span></span>
+                    </div>
+                </div>
+                
+                <div id="internalProcessBox" class="admin-only hidden bg-amber-50 border border-amber-200 p-4 rounded-xl shadow-sm text-xs">
+                    <label class="block font-black text-amber-900 uppercase text-[11px] mb-2"><i class="fa-solid fa-arrows-rotate"></i> Pembaruan Status</label>
+                    <div class="flex gap-2.5 mb-3">
+                        <select id="modalStatusSelect" onchange="onModalStatusChange()" class="modern-select flex-1 px-3 py-2 rounded-lg font-black text-xs cursor-pointer shadow-sm"></select>
+                        <button id="btnSimpanStatus" onclick="updateRequestStatus()" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white font-black rounded-lg shadow-md transition-all shrink-0"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+                    </div>
+                    <div class="pt-3 border-t border-amber-200/50">
+                        <label id="modalKetLabel" class="block font-black text-slate-700 text-[11px] uppercase mb-1.5"><i class="fa-solid fa-comment-dots text-amber-600"></i> Update Keterangan <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                        <textarea id="modalInputKeterangan" rows="2" placeholder="Catatan proses..." class="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs font-bold shadow-inner resize-none"></textarea>
+                    </div>
+                    <div id="modalStoContainer" class="hidden pt-3 border-t border-amber-200/50 mt-2">
+                        <label class="block font-black text-purple-900 text-[11px] uppercase mb-1.5"><i class="fa-solid fa-barcode"></i> Nomor STO <span class="text-rose-600 font-black">* (Wajib)</span></label>
+                        <input type="text" id="modalInputNoSto" placeholder="Masukkan Nomor STO" class="w-full px-3 py-2 rounded-lg border border-purple-300 font-mono text-xs font-black shadow-inner">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="skuModal" class="fixed inset-0 z-[70] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full overflow-hidden transform transition-all max-h-[90vh] flex flex-col scale-95 opacity-0" id="skuModalContent">
+            <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
+                <h3 class="font-black text-sm flex items-center gap-2" id="skuModalTitle">Top SKU</h3>
+                <button onclick="closeSkuModal()" class="text-slate-400 hover:text-white rounded-lg p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto custom-scrollbar flex-1 bg-slate-50">
+                <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-x-auto w-full">
+                    <table class="w-full text-left text-[11px] min-w-[850px]">
+                        <thead class="bg-slate-100 text-slate-500 uppercase font-black border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">Rank</th>
+                                <th class="p-3">SKU Code</th>
+                                <th class="p-3 min-w-[200px]">Description</th>
+                                <th class="p-3">MC Lvl 4</th>
+                                <th class="p-3 text-center">Bin Code</th>
+                                <th class="p-3 text-right">Total Qty</th>
+                                <th class="p-3 text-right">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="full-sku-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="warningModal" class="fixed inset-0 z-[75] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3">
+        <div class="bg-white rounded-xl shadow-2xl max-w-6xl w-full overflow-hidden transform transition-all max-h-[90vh] flex flex-col scale-95 opacity-0" id="warningModalContent">
+            <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
+                <h3 class="font-black text-sm flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Detail Peringatan Status Akhir</h3>
+                <button onclick="closeWarningModal()" class="text-slate-400 hover:text-white rounded-lg p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto custom-scrollbar flex-1 bg-slate-50">
+                <div class="bg-white rounded-lg border border-slate-200 shadow-sm overflow-x-auto w-full">
+                    <table class="w-full text-left text-[11px] min-w-[1050px]">
+                        <thead class="bg-rose-50 text-rose-700 uppercase font-black border-b border-rose-200">
+                            <tr>
+                                <th class="p-3">Kode Site</th>
+                                <th class="p-3">Site Name</th>
+                                <th class="p-3">SKU Code</th>
+                                <th class="p-3 min-w-[200px]">Description</th>
+                                <th class="p-3">MC Lvl 4</th>
+                                <th class="p-3 text-center">Qty</th>
+                                <th class="p-3">Tujuan</th>
+                                <th class="p-3">Status Saat Ini</th>
+                                <th class="p-3">Tgl & Waktu</th>
+                                <th class="p-3 text-center sticky right-0 bg-rose-100 z-20 shadow-[-6px_0_12px_-4px_rgba(0,0,0,0.15)] border-l border-rose-200 min-w-[100px]">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="warning-table-body" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="masterDataModal" class="fixed inset-0 z-[80] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full overflow-hidden transform transition-all max-h-[95vh] flex flex-col scale-95 opacity-0" id="masterDataModalContent">
+            <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between shrink-0">
+                <h3 class="font-black text-sm flex items-center gap-2"><i class="fa-solid fa-database text-brand-400"></i> Update Master</h3>
+                <button onclick="closeMasterModal()" class="text-slate-400 hover:text-white rounded-lg p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 overflow-y-auto custom-scrollbar flex-1 bg-slate-50 space-y-4 text-xs relative">
+                <div id="persistentLoadingToast" class="hidden absolute inset-0 z-20 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center transition-opacity opacity-0">
+                    <div class="w-12 h-12 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-3 shadow-md"></div>
+                    <p class="font-black text-brand-900 bg-white px-4 py-2 rounded-full shadow-lg border border-brand-100"><i class="fa-solid fa-cloud-arrow-up mr-2"></i> ⏳ Memproses Update Server...</p>
+                </div>
+                <div>
+                    <div class="bg-slate-200/80 p-1.5 rounded-xl shadow-inner flex items-center justify-between gap-1.5 w-full border border-slate-300">
+                        <button id="btnMasterSite" onclick="setMasterTab('site')" class="flex-1 py-2 text-[11px] sm:text-xs font-black rounded-lg bg-brand-600 text-white shadow-md transition-all duration-150 flex items-center justify-center gap-1.5"><i class="fa-solid fa-store"></i> Master Site</button>
+                        <button id="btnMasterArtikel" onclick="setMasterTab('artikel')" class="flex-1 py-2 text-[11px] sm:text-xs font-black rounded-lg text-slate-600 hover:text-slate-800 bg-transparent transition-all duration-150 flex items-center justify-center gap-1.5"><i class="fa-solid fa-box-open"></i> Master Artikel</button>
+                        <button id="btnMasterBin" onclick="setMasterTab('bin')" class="flex-1 py-2 text-[11px] sm:text-xs font-black rounded-lg text-slate-600 hover:text-slate-800 bg-transparent transition-all duration-150 flex items-center justify-center gap-1.5"><i class="fa-solid fa-boxes-stacked"></i> Inventory By Bin</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-black text-slate-700 uppercase mb-1.5"><i class="fa-solid fa-paste"></i> Paste Data (CTRL+V) Pada kotak di bawah ini...</label>
+                    <textarea id="modalMasterDataInput" rows="10" onclick="handleTextareaFocus(this)" oninput="handleTextareaInput(this)" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 text-[11px] font-mono font-bold focus:ring-2 focus:ring-brand-500/30 shadow-inner resize-y whitespace-pre text-slate-400 bg-slate-100 transition-colors" data-is-placeholder="true"></textarea>
+                    <p class="text-[10px] text-slate-500 font-bold mt-1.5 italic">*Klik area kotak di atas, lalu tekan CTRL+V. Teks petunjuk abu-abu akan otomatis tertimpa.</p>
+                </div>
+            </div>
+            <div class="bg-white p-3.5 flex justify-between shrink-0 border-t border-slate-200">
+                <button onclick="closeMasterModal()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-black text-xs transition-colors shadow-sm">Batal</button>
+                <button id="btnSubmitMaster" onclick="processMasterDataUpdate()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-black text-xs shadow-md transition-all flex items-center gap-2"><i class="fa-solid fa-cloud-arrow-up"></i> Simpan & Sinkronkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // URL GOOGLE APPS SCRIPT (GANTI DENGAN URL ANDA YANG BARU)
+        // ==========================================
+        const DEFAULT_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwkN5dLBKGM-HromBevQ9QaymcJOaapnndVZ4ZKLF7s814FBiDg4ZyVFlMDlXgO4Byo/exec";
+
+        let isViewAll = false;
+        let activeDataInputTab = 'retur'; 
+        let isAdminMode = false;
+        let robotClickCount = 0;
+        let robotClickTimer = null;
+        let activeMasterTab = 'site';
+
+        let masterSite = [];
+        let masterArtikel = [];
+        let inventoryBin = [];
+        let requestsList = [];
+        let custToleRequestsList = [];
+        let pendingUpdates = {};
+        let activeDetailReqId = null;
+        let fpInstance = null;
+
+        let chartStatusInstance = null;
+        let chartPengirimanInstance = null;
+        let chartAvgTimeInstance = null;
+
+        function getStatusEmoji(status) {
+            if(!status) return 'ℹ️';
+            const s = String(status).toLowerCase();
+            if(s.includes('waiting')) return '⏳';
+            if(s.includes('ready') || s.includes('selesai') || s.includes('done sto') || s.includes('done transaksi') || s.includes('done ambil')) return '✅';
+            if(s.includes('keep')) return '📦';
+            if(s.includes('kasir')) return '📠';
+            if(s.includes('damage')) return '💔';
+            if(s.includes('kosong') || s.includes('no stock')) return '📭';
+            if(s.includes('cancel')) return '🚫';
+            if(s.includes('lorong')) return '🚶';
+            return '📌';
+        }
+        
+        function getStatusIcon(status) {
+            if(!status) return '<i class="fa-solid fa-circle-info text-slate-500"></i>';
+            const s = String(status).toLowerCase();
+            if(s.includes('waiting')) return '<i class="fa-solid fa-hourglass-half animate-pulse text-amber-500"></i>';
+            if(s.includes('ready') || s.includes('selesai') || s.includes('done sto') || s.includes('done transaksi') || s.includes('done ambil')) return '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+            if(s.includes('keep')) return '<i class="fa-solid fa-box-archive text-blue-500"></i>';
+            if(s.includes('kasir')) return '<i class="fa-solid fa-cash-register text-purple-500"></i>';
+            if(s.includes('damage')) return '<i class="fa-solid fa-heart-crack text-orange-500"></i>';
+            if(s.includes('kosong') || s.includes('no stock')) return '<i class="fa-solid fa-box-open text-rose-500"></i>';
+            if(s.includes('cancel')) return '<i class="fa-solid fa-ban text-rose-500"></i>';
+            if(s.includes('lorong')) return '<i class="fa-solid fa-person-walking text-blue-500"></i>';
+            return '<i class="fa-solid fa-circle-info text-slate-500"></i>';
+        }
+
+        function getTujuanIcon(tujuan) {
+            if(!tujuan) return '<i class="fa-solid fa-bullseye text-slate-500"></i>';
+            const t = String(tujuan).toLowerCase();
+            if(t.includes('retur')) return '<i class="fa-solid fa-box-archive text-rose-500"></i>';
+            if(t.includes('endless')) return '<i class="fa-solid fa-cart-shopping text-blue-500"></i>';
+            if(t.includes('cust')) return '<i class="fa-solid fa-user-tag text-purple-500"></i>';
+            return '<i class="fa-solid fa-bullseye text-slate-500"></i>';
+        }
+        
+        function getPengirimanIcon(pengiriman) {
+            if(!pengiriman) return '<i class="fa-solid fa-paper-plane text-slate-500"></i>';
+            const p = String(pengiriman).toLowerCase();
+            if(p.includes('jne') || p.includes('j&t') || p.includes('spx')) return '<i class="fa-solid fa-truck-fast text-orange-500"></i>';
+            if(p.includes('gosend') || p.includes('grab')) return '<i class="fa-solid fa-motorcycle text-emerald-500"></i>';
+            if(p.includes('pickup')) return '<i class="fa-solid fa-store text-blue-500"></i>';
+            if(p.includes('lalamove')) return '<i class="fa-solid fa-van-shuttle text-orange-500"></i>';
+            return '<i class="fa-solid fa-paper-plane text-slate-500"></i>';
+        }
+
+        function parseDateSafe(dateStr) {
+            if (!dateStr || dateStr === '-') return new Date(NaN);
+            let d = new Date(dateStr);
+            if (isNaN(d.getTime()) && typeof dateStr === 'string' && dateStr.includes('-') && dateStr.includes(':')) {
+                const parts = dateStr.split(' ');
+                if(parts.length >= 2) {
+                    const dmy = parts[0].split('-');
+                    const hm = parts[1].split(':');
+                    if (dmy.length === 3 && hm.length >= 2) {
+                        d = new Date(dmy[2], parseInt(dmy[1])-1, dmy[0], hm[0], hm[1], hm[2] || 0);
+                    }
+                }
+            }
+            return d;
+        }
+
+        function formatIndoDate(dateStr) {
+            let d = parseDateSafe(dateStr);
+            if (isNaN(d.getTime())) return String(dateStr);
+
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+            
+            return `${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')} ${months[d.getMonth()]} ${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
+        }
+
+        function safeJSONParse(text) { 
+            if (!text || typeof text !== 'string') return null;
+            try { return JSON.parse(text); } catch(e) { return null; } 
+        }
+
+        function cleanNumberStr(str) { return str ? (parseInt(String(str).replace(/[^0-9]/g, '')) || 0) : 0; }
+
+        function loadDataFromCache() {
+            try {
+                const cSite = localStorage.getItem('cacheMasterSite'); if (cSite) masterSite = JSON.parse(cSite);
+                const cArt = localStorage.getItem('cacheMasterArtikel'); if (cArt) masterArtikel = JSON.parse(cArt);
+                const cBin = localStorage.getItem('cacheInventoryBin'); if (cBin) inventoryBin = JSON.parse(cBin);
+                const cReq = localStorage.getItem('cacheRequestsList'); if (cReq) requestsList = JSON.parse(cReq);
+                const cCust = localStorage.getItem('cacheCustToleRequestsList'); if (cCust) custToleRequestsList = JSON.parse(cCust);
+                const cPend = localStorage.getItem('cachePendingUpdates'); if (cPend) pendingUpdates = JSON.parse(cPend);
+            } catch(e) {}
+        }
+
+        function saveDataToCache() {
+            try {
+                localStorage.setItem('cacheMasterSite', JSON.stringify(masterSite));
+                localStorage.setItem('cacheMasterArtikel', JSON.stringify(masterArtikel));
+                localStorage.setItem('cacheInventoryBin', JSON.stringify(inventoryBin));
+                localStorage.setItem('cacheRequestsList', JSON.stringify(requestsList));
+                localStorage.setItem('cacheCustToleRequestsList', JSON.stringify(custToleRequestsList));
+                localStorage.setItem('cachePendingUpdates', JSON.stringify(pendingUpdates));
+            } catch(e) {}
+        }
+
+        window.onload = function() {
+            const dateRangeEl = document.getElementById("dateRangeFilter");
+            if (dateRangeEl) {
+                fpInstance = flatpickr(dateRangeEl, {
+                    mode: "range", dateFormat: "d-m-Y", onChange: function() { renderRequestCards(); }
+                });
+            }
+
+            loadDataFromCache();
+            
+            populateStatusFilterDropdown();
+            renderRequestCards();
+            updateDashboard();
+            updateMenuNotificationIndicator();
+            updateMasterPlaceholder();
+            
+            syncDataFromSheetsBackground();
+            setInterval(() => syncDataFromSheetsBackground(), 30000); 
+
+            switchTab('input');
+        };
+
+        function handleRobotClick() {
+            robotClickCount++;
+            clearTimeout(robotClickTimer);
+            robotClickTimer = setTimeout(() => { robotClickCount = 0; }, 800);
+
+            if (robotClickCount === 3) {
+                isAdminMode = !isAdminMode;
+                robotClickCount = 0;
+                
+                const sbMode = document.getElementById('sidebarModeStatus');
+                if (isAdminMode) {
+                    document.body.classList.add('admin-mode');
+                    if(sbMode) { sbMode.innerHTML = `<i class="fa-solid fa-unlock text-[9px]"></i> Admin Aktif`; sbMode.className = "text-[10px] bg-rose-900 text-rose-200 px-2 py-0.5 rounded border border-rose-700 mt-1 inline-block font-black"; }
+                    showToast('🔓 Mode Admin Aktif', 'Akses hapus, proses & Master Data dibuka.');
+                } else {
+                    document.body.classList.remove('admin-mode');
+                    if(sbMode) { sbMode.innerHTML = `<i class="fa-solid fa-user text-[9px]"></i> Tamu Aktif`; sbMode.className = "text-[10px] bg-brand-900 text-brand-200 px-2 py-0.5 rounded border border-brand-700 mt-1 inline-block font-bold"; }
+                    showToast('🔒 Mode Tamu Aktif', 'Akses dikunci. Mode Aman.');
+                }
+                const processBox = document.getElementById('internalProcessBox');
+                const detailModal = document.getElementById('detailModal');
+                if (processBox && detailModal && !detailModal.classList.contains('hidden')) {
+                    if (isAdminMode) processBox.classList.remove('hidden'); else processBox.classList.add('hidden');
+                }
+                renderRequestCards();
+            }
+        }
+
+        function toggleSidebar() {
+            const drawer = document.getElementById('sidebarDrawer');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (!drawer || !overlay) return;
+            if (!drawer.classList.contains('-translate-x-full')) {
+                drawer.classList.add('-translate-x-full'); overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 150);
+            } else {
+                overlay.classList.remove('hidden'); requestAnimationFrame(() => overlay.classList.remove('opacity-0'));
+                drawer.classList.remove('-translate-x-full');
+            }
+        }
+
+        function switchTab(tabId) {
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+                const target = document.getElementById(`tab-${tabId}`);
+                if (target) target.classList.remove('hidden');
+
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.className = 'nav-btn w-full px-3 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-between text-slate-300 hover:text-white hover:bg-slate-800';
+                });
+                const activeNav = document.getElementById(`nav-${tabId}`);
+                if (activeNav) activeNav.className = 'nav-btn w-full px-3 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-between bg-brand-600 text-white shadow-md';
+
+                if (tabId === 'dashboard') updateDashboard();
+                const drawer = document.getElementById('sidebarDrawer');
+                if (drawer && !drawer.classList.contains('-translate-x-full')) toggleSidebar();
+            });
+        }
+
+        function setFormType(type) {
+            const btnReg = document.getElementById('btnFormReguler'), btnCust = document.getElementById('btnFormCustTole');
+            const formReg = document.getElementById('requestForm'), formCust = document.getElementById('custToleForm');
+
+            if (type === 'reguler') {
+                if(btnReg) btnReg.className = 'flex-1 sm:flex-none px-3 py-1 text-xs font-black rounded-full bg-brand-600 text-white shadow transition-all duration-150';
+                if(btnCust) btnCust.className = 'flex-1 sm:flex-none px-3 py-1 text-xs font-black rounded-full text-slate-400 hover:text-slate-200 transition-all duration-150 bg-transparent';
+                if(formReg) formReg.classList.remove('hidden'); if(formCust) formCust.classList.add('hidden');
+            } else {
+                if(btnCust) btnCust.className = 'flex-1 sm:flex-none px-3 py-1 text-xs font-black rounded-full bg-indigo-600 text-white shadow transition-all duration-150';
+                if(btnReg) btnReg.className = 'flex-1 sm:flex-none px-3 py-1 text-xs font-black rounded-full text-slate-400 hover:text-slate-200 bg-transparent transition-all duration-150';
+                if(formCust) formCust.classList.remove('hidden'); if(formReg) formReg.classList.add('hidden');
+            }
+        }
+        
+        function setDataInputTab(tab) {
+            activeDataInputTab = tab;
+            const btnRetur = document.getElementById('btnTabRetur'), btnCust = document.getElementById('btnTabCust');
+            if (tab === 'retur') {
+                if(btnRetur) btnRetur.className = 'w-full sm:w-auto relative px-5 py-1.5 text-xs font-black rounded-full bg-brand-600 text-white shadow-md transition-all duration-150 flex items-center justify-center gap-2';
+                if(btnCust) btnCust.className = 'w-full sm:w-auto relative px-5 py-1.5 text-xs font-black rounded-full text-slate-600 hover:text-slate-800 bg-transparent transition-all duration-150 flex items-center justify-center gap-2';
+            } else {
+                if(btnCust) btnCust.className = 'w-full sm:w-auto relative px-5 py-1.5 text-xs font-black rounded-full bg-indigo-600 text-white shadow-md transition-all duration-150 flex items-center justify-center gap-2';
+                if(btnRetur) btnRetur.className = 'w-full sm:w-auto relative px-5 py-1.5 text-xs font-black rounded-full text-slate-600 hover:text-slate-800 bg-transparent transition-all duration-150 flex items-center justify-center gap-2';
+            }
+            populateStatusFilterDropdown(); 
+            renderRequestCards();
+        }
+
+        function populateStatusFilterDropdown() {
+            const filterStatus = document.getElementById('filterStatus');
+            if (!filterStatus) return;
+            let statuses = activeDataInputTab === 'retur' 
+                ? ['Waiting Process', 'Ready', 'Keep', 'Damage', 'Kosong', 'Cancel', 'Done STO', 'Done Transaksi', 'Lainnya']
+                : ['Waiting Process', 'Done Ambil', 'Di Lorong', 'Di kasir', 'No Stock', 'Cancel', 'Lainnya'];
+
+            let html = '<option value="ALL">🔍 Semua Status</option>';
+            statuses.forEach(s => { html += `<option value="${s}">${getStatusEmoji(s)} ${s}</option>`; });
+            filterStatus.innerHTML = html;
+        }
+
+        function onTujuanChange() {
+            const el = document.getElementById('inputTujuan'), resp = document.getElementById('respTujuanSubmit');
+            if (el && resp) { 
+                const val = el.value || '--';
+                resp.innerHTML = val !== '--' ? `${getTujuanIcon(val)} ${val}` : '--'; 
+                if(val!=='--') { resp.classList.remove('text-slate-500'); resp.classList.add('text-brand-700'); }
+            }
+        }
+        function onPengirimanChange() {
+            const el = document.getElementById('inputPengiriman'), resp = document.getElementById('respPengirimanSubmit');
+            if (el && resp) { 
+                const val = el.value || '--';
+                resp.innerHTML = val !== '--' ? `${getPengirimanIcon(val)} ${val}` : '--'; 
+                if(val!=='--') { resp.classList.remove('text-slate-500'); resp.classList.add('text-brand-700'); }
+            }
+        }
+        function resetOtherFormResps() {
+            ['respTujuanSubmit', 'respPengirimanSubmit'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) { el.innerHTML = '--'; el.classList.add('text-slate-500'); el.classList.remove('text-brand-700'); }
+            });
+        }
+
+        function getMultiBinCode(skuCode) {
+            if(!skuCode) return 'N/A';
+            const safeSku = String(skuCode).toUpperCase();
+            const matchedBins = inventoryBin.filter(b => String(b.sku).toUpperCase() === safeSku);
+            return matchedBins.length > 0 ? matchedBins.map(b => b.bin).join(' | ') : 'N/A';
+        }
+
+        function onSkuCodeCustChange() {
+            const inputSku = document.getElementById('inputCustSkuCode');
+            if (!inputSku) return;
+            const val = String(inputSku.value).trim().toUpperCase();
+            if(val === "") { resetCustResp(); return; }
+            
+            const matched = masterArtikel.find(a => String(a.sku).toUpperCase() === val);
+            const badge = document.getElementById('custSkuMatchBadge');
+            const respSku = document.getElementById('respCustSku'), respDesc = document.getElementById('respCustDesc');
+            const respBin = document.getElementById('respCustBin'), respMc = document.getElementById('respCustMcLevel');
+
+            if (matched) {
+                if(respSku) { respSku.innerText = val; respSku.classList.remove('text-slate-500'); respSku.classList.add('text-indigo-700'); }
+                if(respDesc) { respDesc.innerText = matched.desc; respDesc.classList.remove('text-slate-500'); respDesc.classList.add('text-slate-800'); }
+                if(respMc) { respMc.innerText = matched.mc; respMc.classList.remove('text-slate-500'); respMc.classList.add('text-indigo-700'); }
+                
+                const bins = getMultiBinCode(val);
+                if(respBin) { respBin.innerText = bins; respBin.classList.remove('text-slate-500'); respBin.classList.add('text-indigo-700'); }
+                if(badge) badge.classList.remove('hidden');
+            } else { resetCustResp(); }
+            calculateCustTotals();
+        }
+
+        function resetCustResp() {
+            const badge = document.getElementById('custSkuMatchBadge');
+            if(badge) badge.classList.add('hidden');
+            ['respCustSku', 'respCustDesc', 'respCustBin', 'respCustMcLevel'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) { el.innerText = '--'; el.classList.remove('text-indigo-700', 'text-slate-800'); el.classList.add('text-slate-500'); }
+            });
+            const rQty = document.getElementById('respCustQty');
+            if(rQty) { rQty.innerText = '--'; }
+        }
+
+        function calculateCustTotals() {
+            const qtyEl = document.getElementById('inputCustQty'), respQty = document.getElementById('respCustQty');
+            if(qtyEl && respQty) {
+                if (qtyEl.value) { respQty.innerText = qtyEl.value; }
+                else { respQty.innerText = '--'; }
+            }
+        }
+
+        function onKodeSiteChange() {
+            const inputKodeSiteEl = document.getElementById('inputKodeSite');
+            if (!inputKodeSiteEl) return;
+            const val = String(inputKodeSiteEl.value).trim().toUpperCase();
+            if(val === "") { resetSiteResp(); return; }
+
+            const matched = masterSite.find(s => String(s.kode).toUpperCase() === val);
+            const badge = document.getElementById('siteMatchBadge');
+            const respSiteName = document.getElementById('respDetailSiteName'), respKode = document.getElementById('respDetailKodeSite'), respBranch = document.getElementById('respDetailBranch');
+
+            if (matched) {
+                if(respKode) { respKode.innerText = matched.kode; respKode.classList.remove('text-slate-500'); respKode.classList.add('text-brand-700'); }
+                if(respSiteName) { respSiteName.innerText = matched.name; respSiteName.classList.remove('text-slate-500'); respSiteName.classList.add('text-slate-800'); }
+                if(respBranch) { respBranch.innerText = matched.branch || '-'; respBranch.classList.remove('text-slate-500'); respBranch.classList.add('text-slate-800'); }
+                if(badge) badge.classList.remove('hidden');
+            } else { resetSiteResp(); }
+        }
+        
+        function resetSiteResp() {
+            const badge = document.getElementById('siteMatchBadge');
+            if(badge) badge.classList.add('hidden');
+            ['respDetailKodeSite', 'respDetailSiteName', 'respDetailBranch'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) { el.innerText = '--'; el.classList.remove('text-brand-700', 'text-slate-800'); el.classList.add('text-slate-500'); }
+            });
+        }
+
+        function onSkuCodeChange() {
+            const inputSkuCodeEl = document.getElementById('inputSkuCode');
+            if (!inputSkuCodeEl) return;
+            const val = String(inputSkuCodeEl.value).trim().toUpperCase();
+            if(val === "") { resetSkuResp(); return; }
+
+            const matchedArt = masterArtikel.find(a => String(a.sku).toUpperCase() === val);
+            const badge = document.getElementById('skuMatchBadge');
+            
+            if (matchedArt) {
+                const respSkuCodeDisplayEl = document.getElementById('respSkuCodeDisplay'), respSkuDescEl = document.getElementById('respSkuDesc'), respMcLevelEl = document.getElementById('respMcLevel');
+                if(respSkuCodeDisplayEl) { respSkuCodeDisplayEl.innerText = val; respSkuCodeDisplayEl.classList.remove('text-slate-500'); respSkuCodeDisplayEl.classList.add('text-brand-700'); }
+                if(respSkuDescEl) { respSkuDescEl.innerText = matchedArt.desc; respSkuDescEl.classList.remove('text-slate-500'); respSkuDescEl.classList.add('text-slate-800'); }
+                if(respMcLevelEl) { respMcLevelEl.innerText = matchedArt.mc; respMcLevelEl.classList.remove('text-slate-500'); respMcLevelEl.classList.add('text-slate-800'); }
+                if(badge) badge.classList.remove('hidden');
+            } else { resetSkuResp(); }
+            calculateTotals();
+        }
+
+        function resetSkuResp() {
+            const badge = document.getElementById('skuMatchBadge');
+            if(badge) badge.classList.add('hidden');
+            ['respSkuCodeDisplay', 'respSkuDesc', 'respMcLevel'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) { el.innerText = '--'; el.classList.remove('text-brand-700', 'text-slate-800'); el.classList.add('text-slate-500'); }
+            });
+            ['respQtySubmit', 'respHargaSatuan', 'respTotalHarga'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.innerText = id==='respQtySubmit'?'--':'Rp 0';
+            });
+        }
+
+        function calculateTotals() {
+            const inputSkuEl = document.getElementById('inputSkuCode');
+            const inputQtyEl = document.getElementById('inputQty');
+            if(!inputSkuEl || !inputQtyEl) return;
+
+            const val = String(inputSkuEl.value).trim().toUpperCase();
+            const qty = parseInt(inputQtyEl.value) || 0;
+            const matchedArt = masterArtikel.find(a => String(a.sku).toUpperCase() === val);
+            const unitPrice = matchedArt ? cleanNumberStr(matchedArt.price) : 0;
+            const total = unitPrice * qty;
+
+            const rQty = document.getElementById('respQtySubmit'), rHarga = document.getElementById('respHargaSatuan'), rTotal = document.getElementById('respTotalHarga');
+            if(rQty) rQty.innerText = qty > 0 ? qty : '--';
+            if(rHarga) rHarga.innerText = `Rp ${unitPrice.toLocaleString('id-ID')}`;
+            if(rTotal) rTotal.innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        const generateDateStringForId = () => {
+            const now = new Date();
+            return `${String(now.getDate()).padStart(2, '0')}${String(now.getMonth() + 1).padStart(2, '0')}${now.getFullYear()}`;
+        };
+        const getFormattedDateTime = () => { return new Date().toISOString(); };
+
+        function getNextId(prefix) {
+            const fullPrefix = `${prefix}-${generateDateStringForId()}-`;
+            let maxCount = 0;
+            [...requestsList, ...custToleRequestsList].forEach(req => {
+                if (req.id && String(req.id).startsWith(fullPrefix)) {
+                    const numPart = parseInt(String(req.id).split('-').pop(), 10);
+                    if (!isNaN(numPart) && numPart > maxCount) maxCount = numPart;
+                }
+            });
+            return `${fullPrefix}${(maxCount + 1)}`;
+        }
+
+        function pushDataToBackend(payload) {
+            const webUrl = DEFAULT_WEBAPP_URL;
+            if(!webUrl || webUrl.trim() === '') return; 
+
+            fetch(webUrl + "?t=" + new Date().getTime(), {
+                method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload)
+            }).then(async response => {
+                try {
+                    const textResp = await response.text();
+                    const jsonResp = safeJSONParse(textResp);
+                    if(jsonResp && jsonResp.status === 'success' && payload.action === 'update') {
+                        if (pendingUpdates[payload.id]) { delete pendingUpdates[payload.id]; saveDataToCache(); }
+                    }
+                } catch(e) {}
+            }).catch(err => {});
+        }
+
+        function handleCustToleSubmit(e) {
+            e.preventDefault();
+            try {
+                const skuEl = document.getElementById('inputCustSkuCode');
+                const qtyEl = document.getElementById('inputCustQty');
+                const ketEl = document.getElementById('inputCustKeterangan');
+                if(!skuEl || !qtyEl || !ketEl) return;
+
+                const skuCode = String(skuEl.value).trim().toUpperCase();
+                const qty = parseInt(qtyEl.value) || 1;
+                const keterangan = String(ketEl.value).trim();
+
+                const matchedArtikel = masterArtikel.find(a => String(a.sku).toUpperCase() === skuCode) || { desc: 'Manual Item', mc: '-', price: 0 };
+                const cleanPrice = cleanNumberStr(matchedArtikel.price);
+                const multiBin = getMultiBinCode(skuCode);
+                
+                const newReq = {
+                    id: String(getNextId('CUST')), timestamp: String(getFormattedDateTime()), kodeSite: 'SITE001', siteName: 'REQ CUSTOMERS', branch: '-',
+                    skuCode: String(skuCode), skuDesc: String(matchedArtikel.desc), mcLevel: String(matchedArtikel.mc), binCode: String(multiBin),
+                    qty: qty, hargaSatuan: cleanPrice, totalHarga: cleanPrice * qty,
+                    tujuan: 'Req Cust', pengiriman: '-', status: 'Waiting Process', noSto: '', keterangan: String(keterangan), keteranganProses: ''
+                };
+
+                custToleRequestsList.unshift(newReq);
+                saveDataToCache(); pushDataToBackend(newReq); 
+                
+                const form = document.getElementById('custToleForm');
+                if(form) form.reset(); 
+                resetCustResp();
+                
+                populateStatusFilterDropdown();
+                renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator();
+                
+                showToast('✅ Berhasil Disubmit!', 'Permintaan Req Cust terkirim.');
+            } catch(error) {
+                showToast('❌ Gagal Mengirim', error.message, true);
+            }
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            try {
+                const siteEl = document.getElementById('inputKodeSite');
+                const skuEl = document.getElementById('inputSkuCode');
+                const qtyEl = document.getElementById('inputQty');
+                const tujuanEl = document.getElementById('inputTujuan');
+                const pengirimanEl = document.getElementById('inputPengiriman');
+                
+                if(!siteEl || !skuEl || !qtyEl || !tujuanEl || !pengirimanEl) return;
+
+                const kodeSite = String(siteEl.value).trim().toUpperCase();
+                const skuCode = String(skuEl.value).trim().toUpperCase();
+                const qty = parseInt(qtyEl.value) || 1;
+                const tujuan = String(tujuanEl.value) || 'Retur';
+                const pengiriman = String(pengirimanEl.value) || 'CSS JNE';
+
+                const matchedSite = masterSite.find(s => String(s.kode).toUpperCase() === kodeSite) || { name: kodeSite, branch: '-' };
+                const matchedArtikel = masterArtikel.find(a => String(a.sku).toUpperCase() === skuCode) || { desc: 'Manual Item', mc: '-', price: 0 };
+                const cleanPrice = cleanNumberStr(matchedArtikel.price);
+                const multiBin = getMultiBinCode(skuCode);
+
+                const newReq = {
+                    id: String(getNextId('REQ')), timestamp: String(getFormattedDateTime()), kodeSite: String(kodeSite), siteName: String(matchedSite.name), branch: String(matchedSite.branch),
+                    skuCode: String(skuCode), skuDesc: String(matchedArtikel.desc), mcLevel: String(matchedArtikel.mc), binCode: String(multiBin),
+                    qty: qty, hargaSatuan: cleanPrice, totalHarga: cleanPrice * qty,
+                    tujuan: String(tujuan), pengiriman: String(pengiriman), status: 'Waiting Process', noSto: '', keterangan: '', keteranganProses: ''
+                };
+
+                requestsList.unshift(newReq);
+                saveDataToCache(); pushDataToBackend(newReq);
+                
+                const form = document.getElementById('requestForm');
+                if(form) form.reset();
+                resetSiteResp(); resetSkuResp(); resetOtherFormResps();
+                
+                populateStatusFilterDropdown();
+                renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator();
+                
+                showToast('✅ Berhasil Disubmit!', 'Permintaan tersubmit.');
+            } catch (error) {
+                showToast('❌ Gagal Mengirim', error.message, true);
+            }
+        }
+
+        function updateMenuNotificationIndicator() {
+            const returWaiting = requestsList.filter(r => r.status === 'Waiting Process').length;
+            const custWaiting = custToleRequestsList.filter(r => r.status === 'Waiting Process').length;
+            const total = returWaiting + custWaiting;
+            
+            const lamp = document.getElementById('menuNotificationLamp');
+            if (lamp) { if (total > 0) lamp.classList.remove('hidden'); else lamp.classList.add('hidden'); }
+            
+            const badgeTotal = document.getElementById('badge-total-requests');
+            if (badgeTotal) {
+                badgeTotal.innerText = total;
+                if(total > 0) badgeTotal.classList.remove('hidden'); else badgeTotal.classList.add('hidden');
+            }
+
+            const bRetur = document.getElementById('badge-tab-retur');
+            if(bRetur) {
+                bRetur.innerText = returWaiting;
+                if(returWaiting > 0) bRetur.classList.remove('hidden'); else bRetur.classList.add('hidden');
+            }
+            
+            const bCust = document.getElementById('badge-tab-cust');
+            if(bCust) {
+                bCust.innerText = custWaiting;
+                if(custWaiting > 0) bCust.classList.remove('hidden'); else bCust.classList.add('hidden');
+            }
+        }
+
+        function showToast(title, message, isWarning=false) {
+            const container = document.getElementById('toast-container');
+            if(!container) return;
+            const toast = document.createElement('div');
+            const color = isWarning ? 'rose' : 'emerald';
+            const icon = isWarning ? 'fa-triangle-exclamation' : 'fa-circle-check';
+            toast.className = `bg-slate-900 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 flex items-start gap-3 transform transition-all duration-150 translate-y-4 opacity-0 pointer-events-auto max-w-sm w-full relative z-[100] text-sm`;
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-lg text-${color}-400 bg-slate-800 flex items-center justify-center shrink-0 shadow-inner border border-slate-700"><i class="fa-solid ${icon} text-base"></i></div>
+                <div class="overflow-hidden"><h5 class="font-black text-slate-100">${title}</h5><p class="text-[11px] text-slate-400 font-bold leading-tight mt-1 break-words">${message}</p></div>
+            `;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('translate-y-4', 'opacity-0'));
+            setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4'); setTimeout(() => toast.remove(), 200); }, 3500);
+        }
+
+        async function syncDataFromSheetsBackground() {
+            const webUrl = DEFAULT_WEBAPP_URL;
+            if (!webUrl || webUrl.trim() === '') return;
+
+            try {
+                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: "read" }) 
+                });
+                
+                const text = await res.text();
+                if (!text || text.trim().startsWith('<')) return;
+                const data = safeJSONParse(text);
+                if (!data || !data.requestsList) return;
+                
+                if (data.masterSite && data.masterSite.length > 0) masterSite = data.masterSite;
+                if (data.masterArtikel && data.masterArtikel.length > 0) masterArtikel = data.masterArtikel;
+                if (data.inventoryBin && data.inventoryBin.length > 0) inventoryBin = data.inventoryBin;
+
+                const tempReqList = [], tempCustList = [];
+                const serverReqIds = new Set(); 
+
+                data.requestsList.forEach(r => {
+                    let reqId = String(r['ID Permintaan'] || r.id || '');
+                    if (!reqId) return;
+                    
+                    serverReqIds.add(reqId.toUpperCase());
+                    
+                    let pending = pendingUpdates[reqId];
+                    let parsedStatus = String(r['Status'] || r.status || 'Waiting Process');
+                    let parsedNoSto = String(r['No STO'] || r.noSto || '');
+                    let parsedKetProses = String(r['Keterangan Proses'] || r.keteranganProses || '');
+
+                    if (pending) {
+                        if (parsedStatus === pending.status) delete pendingUpdates[reqId]; 
+                        else if (Date.now() - pending.timestamp < 180000) { parsedStatus = pending.status; parsedNoSto = pending.noSto; parsedKetProses = pending.keteranganProses; }
+                        else delete pendingUpdates[reqId]; 
+                    }
+
+                    let pQty = r['Qty'] || r.qty || 1, pHarga = r['Harga Satuan'] || r.hargaSatuan || 0, pTotal = r['Total Harga'] || r.totalHarga || 0;
+                    
+                    const tTujuan = String(r['Tujuan'] || r.tujuan || '').trim();
+                    const tId = reqId.toUpperCase();
+                    
+                    let isCustType = tTujuan.toUpperCase() === 'REQ CUST';
+                    if (!isCustType && (tTujuan.toUpperCase().includes('CUST') || tId.startsWith('CUST'))) {
+                        isCustType = true;
+                    }
+
+                    let tPengiriman = String(r['Pengiriman'] || r.pengiriman || '');
+                    if (!tPengiriman || tPengiriman.trim() === '' || tPengiriman === '-') tPengiriman = 'CSS JNE';
+
+                    const reqObj = {
+                        id: reqId, 
+                        timestamp: String(r['Timestamp'] || r.timestamp || '-'), 
+                        kodeSite: String(r['Kode Site'] || r.kodeSite || '-'),
+                        siteName: String(r['Site Name'] || r.siteName || '-'), 
+                        branch: String(r['Branch'] || r.branch || '-'),
+                        skuCode: String(r['SKU Code'] || r.skuCode || '-'), 
+                        skuDesc: String(r['SKU Description'] || r.skuDesc || '-'),
+                        mcLevel: String(r['MC Level 4'] || r.mcLevel || '-'), 
+                        binCode: String(r['Bin Code'] || r.binCode || '-'),
+                        qty: Number(pQty) || 1, 
+                        hargaSatuan: cleanNumberStr(pHarga), 
+                        totalHarga: cleanNumberStr(pTotal),
+                        tujuan: isCustType ? 'Req Cust' : (tTujuan || 'Retur'),
+                        pengiriman: tPengiriman,
+                        status: parsedStatus, 
+                        noSto: parsedNoSto, 
+                        keterangan: String(r['Keterangan'] || r.keterangan || ''), 
+                        keteranganProses: parsedKetProses
+                    };
+
+                    if (isCustType) tempCustList.push(reqObj);
+                    else tempReqList.push(reqObj);
+                });
+                
+                const now = Date.now();
+                const keepLocalReqs = requestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000));
+                const keepLocalCust = custToleRequestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000));
+
+                requestsList = [...keepLocalReqs, ...tempReqList.reverse()]; 
+                custToleRequestsList = [...keepLocalCust, ...tempCustList.reverse()];
+                
+                saveDataToCache(); renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator();
+            } catch (err) {}
+        }
+
+        function renderRequestCards() {
+            const grid = document.getElementById('requestsGrid');
+            if (!grid) return;
+            
+            try {
+                const countLabel = document.getElementById('requestsCountLabel');
+                const searchInput = document.getElementById('searchRequests'), filterStatus = document.getElementById('filterStatus'), dateRangeFilter = document.getElementById('dateRangeFilter');
+                
+                const q = searchInput ? String(searchInput.value).toLowerCase() : '';
+                const statusFilter = filterStatus ? filterStatus.value : 'ALL';
+                let startDate = '', endDate = '';
+                if (dateRangeFilter && dateRangeFilter.value) {
+                    const dates = dateRangeFilter.value.split(' to ');
+                    startDate = dates[0]; endDate = dates.length > 1 ? dates[1] : dates[0];
+                }
+
+                const adminWarningBanner = document.getElementById('adminWarningBanner');
+                if (isAdminMode && activeDataInputTab === 'retur') {
+                    const hangingReqs = requestsList.filter(r => r.status !== 'Waiting Process' && !['Done STO', 'Done Transaksi', 'Cancel'].includes(r.status));
+                    if (hangingReqs.length > 0) {
+                        adminWarningBanner.innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-lg shadow-sm mb-4"><div class="flex items-start"><div class="flex-shrink-0"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i></div><div class="ml-3"><p class="text-xs text-amber-800 font-bold">Terdapat ${hangingReqs.length} permintaan yang belum berstatus akhir (Done STO / Done Transaksi / Cancel). Segera cek dan konfirmasi ke store bersangkutan terkait status permintaan Retur/Endless Aislenya!</p></div></div></div>`;
+                        adminWarningBanner.classList.remove('hidden');
+                    } else {
+                        adminWarningBanner.classList.add('hidden');
+                    }
+                } else {
+                    if (adminWarningBanner) adminWarningBanner.classList.add('hidden');
+                }
+
+                const targetList = activeDataInputTab === 'retur' ? requestsList : custToleRequestsList;
+                
+                const filtered = targetList.filter(item => {
+                    const matchQ = String(item.siteName || '').toLowerCase().includes(q) || 
+                                   String(item.skuCode || '').toLowerCase().includes(q) || 
+                                   String(item.skuDesc || '').toLowerCase().includes(q) || 
+                                   String(item.keterangan || '').toLowerCase().includes(q) || 
+                                   String(item.kodeSite || '').toLowerCase().includes(q);
+                    
+                    const matchStatus = statusFilter === 'ALL' || item.status === statusFilter;
+                    
+                    let matchDate = true;
+                    if (startDate || endDate) {
+                        let itemDate = String(item.timestamp).split('T')[0]; if(String(item.timestamp).includes(' ')) itemDate = String(item.timestamp).split(' ')[0].split('-').reverse().join('-');
+                        if (startDate && itemDate < startDate.split('-').reverse().join('-')) matchDate = false;
+                        if (endDate && itemDate > endDate.split('-').reverse().join('-')) matchDate = false;
+                    } else { if (!isViewAll && item.status !== 'Waiting Process') matchDate = false; }
+
+                    return matchQ && matchStatus && matchDate;
+                });
+
+                if(countLabel) countLabel.innerText = isViewAll || (startDate || endDate) ? `Menampilkan ${filtered.length} Permintaan` : `${filtered.length} Permintaan Belum Diproses`;
+
+                if (filtered.length === 0) { 
+                    grid.innerHTML = `<div class="col-span-full py-8 text-center bg-white rounded-xl border border-slate-200 shadow-sm"><i class="fa-solid fa-folder-open text-3xl text-slate-300 mb-3"></i><p class="text-xs text-slate-500 font-bold">Tidak ada data ditemukan.</p></div>`; 
+                    return; 
+                }
+
+                let currentGroupDate = '';
+                grid.innerHTML = filtered.map(item => {
+                    let badgeColor = 'bg-amber-100 text-amber-800 border-amber-300';
+                    if(['Ready','Done Ambil','Selesai'].includes(item.status)) badgeColor = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+                    if(['Keep','Di Lorong'].includes(item.status)) badgeColor = 'bg-blue-100 text-blue-800 border-blue-300';
+                    if(['Done Transaksi','Di kasir','Done STO'].includes(item.status)) badgeColor = 'bg-purple-100 text-purple-800 border-purple-300';
+                    if(['Kosong','Cancel','No Stock'].includes(item.status)) badgeColor = 'bg-rose-100 text-rose-800 border-rose-300';
+                    if(item.status === 'Damage') badgeColor = 'bg-orange-100 text-orange-800 border-orange-300';
+                    
+                    let displayedBin = getMultiBinCode(item.skuCode);
+                    if(displayedBin === 'N/A' && item.binCode !== '-') displayedBin = item.binCode;
+
+                    let textKeteranganUpdate = item.keteranganProses ? `<div class="mt-2.5 bg-slate-50 border-slate-200 p-2.5 rounded-lg border shadow-inner"><span class="text-[10px] font-black text-slate-700 block mb-1"><i class="fa-solid fa-comment-dots text-brand-500"></i> Update Keterangan:</span><p class="text-[11px] font-bold text-slate-900 break-words">${item.keteranganProses}</p></div>` : '';
+                    
+                    let actionBtn = `<button onclick="deleteRequest('${item.id}')" class="admin-only bg-rose-100 hover:bg-rose-200 text-rose-600 w-6 h-6 rounded-md flex items-center justify-center shrink-0 border border-rose-200 shadow-sm ml-1.5 transition-colors" title="Hapus"><i class="fa-solid fa-trash text-[10px]"></i></button>`;
+
+                    let groupHtml = '';
+                    if (isViewAll) {
+                        let d = parseDateSafe(item.timestamp);
+                        let groupLabel = "Tanggal Tidak Diketahui";
+                        if (!isNaN(d.getTime())) {
+                            const daysFull = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                            const monthsFull = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                            groupLabel = `${daysFull[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')} ${monthsFull[d.getMonth()]} ${d.getFullYear()}`;
+                        }
+
+                        if (groupLabel !== currentGroupDate) {
+                            groupHtml = `<div class="col-span-full flex items-center gap-3 mt-4 mb-2">
+                                <div class="h-px bg-slate-300 flex-1"></div>
+                                <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider bg-slate-100 px-3 py-1 rounded-full border border-slate-200 shadow-sm"><i class="fa-regular fa-calendar-days mr-1.5 text-brand-500"></i> Data Permintaan : ${groupLabel}</span>
+                                <div class="h-px bg-slate-300 flex-1"></div>
+                            </div>`;
+                            currentGroupDate = groupLabel;
+                        }
+                    }
+
+                    if (activeDataInputTab === 'cust') {
+                        let ketCustBox = item.keterangan ? `<div class="bg-indigo-50 border-indigo-200 p-2.5 rounded-lg border mt-2.5 shadow-sm"><span class="text-[10px] font-black text-indigo-800 block mb-1"><i class="fa-solid fa-comment-dots text-indigo-500"></i> Ket. Request:</span><p class="text-[11px] font-bold text-indigo-950 break-words">${item.keterangan}</p></div>` : '';
+                        
+                        return groupHtml + `<div class="bg-white border-indigo-200 rounded-xl border shadow-sm p-3.5 pb-12 flex flex-col justify-between relative text-sm">
+                            <div class="flex items-start justify-end mb-2">
+                                <div class="flex items-center"><span class="px-2 py-0.5 rounded font-black text-[10px] border flex items-center gap-1.5 ${badgeColor}">${getStatusIcon(item.status)} ${item.status}</span>${actionBtn}</div>
+                            </div>
+                            <div class="bg-indigo-50/30 p-3 rounded-lg border border-indigo-100 shadow-sm">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="font-mono font-black text-purple-700 text-xs break-all"><i class="fa-solid fa-barcode text-purple-400"></i> ${item.skuCode}</span>
+                                    <span class="text-slate-800 font-black bg-white px-2 py-0.5 rounded border border-slate-200 text-[11px] shadow-sm shrink-0"><i class="fa-solid fa-cubes text-slate-400"></i> Qty: ${item.qty}</span>
+                                </div>
+                                <p class="text-xs font-black text-slate-800 break-words mt-1.5 leading-snug">${item.skuDesc}</p>
+                                <div class="flex flex-col gap-1.5 mt-2.5 pt-2 border-t border-indigo-100 text-[10px]">
+                                    <p class="text-slate-600 font-bold"><i class="fa-solid fa-layer-group text-indigo-300 w-3"></i> MC Lvl 4: <span class="font-mono text-slate-800 font-black">${item.mcLevel}</span></p>
+                                    <p class="text-slate-600 font-bold"><i class="fa-solid fa-boxes-stacked text-indigo-300 w-3"></i> Bin Code: <span class="font-mono text-slate-800 font-black bg-indigo-50 px-1 py-0.5 rounded border border-indigo-100">${displayedBin}</span></p>
+                                </div>
+                            </div>
+                            ${ketCustBox}
+                            ${textKeteranganUpdate}
+                            <div class="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-[10px]">
+                                <span class="font-bold text-slate-500 flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> ${formatIndoDate(item.timestamp)}</span>
+                                <button onclick="openDetailModal('${item.id}')" class="bg-indigo-100 hover:bg-indigo-200 border border-indigo-200 text-indigo-800 font-black py-1.5 px-3 rounded-lg text-xs shadow-sm transition-colors flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> Proses</button>
+                            </div>
+                        </div>`;
+                    } else {
+                        let tujuanBadge = item.tujuan === 'Retur' ? "bg-rose-600" : "bg-emerald-600";
+                        return groupHtml + `<div class="bg-white border-slate-200 rounded-xl border shadow-sm p-3.5 pb-12 flex flex-col justify-between relative text-sm">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="w-2/3 pr-2">
+                                    <span class="font-mono font-black text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded text-[10px] border border-brand-200 inline-flex items-center gap-1"><i class="fa-solid fa-store"></i> ${item.kodeSite}</span>
+                                    <h4 class="font-black text-xs text-slate-900 break-words mt-1 leading-snug">${item.siteName}</h4>
+                                    <p class="text-[10px] text-slate-500 font-bold flex items-center gap-1 mt-0.5"><i class="fa-solid fa-code-branch"></i> ${item.branch}</p>
+                                </div>
+                                <div class="flex items-center shrink-0"><span class="px-2 py-0.5 rounded font-black text-[10px] border flex items-center gap-1.5 ${badgeColor}">${getStatusIcon(item.status)} ${item.status}</span>${actionBtn}</div>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 shadow-sm mt-1.5">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="font-mono font-black text-amber-600 text-xs break-all"><i class="fa-solid fa-barcode text-amber-400"></i> ${item.skuCode}</span>
+                                    <span class="text-slate-800 font-black bg-white px-2 py-0.5 rounded border border-slate-200 text-[11px] shadow-sm shrink-0"><i class="fa-solid fa-cubes text-slate-400"></i> Qty: ${item.qty}</span>
+                                </div>
+                                <p class="text-xs font-black text-slate-800 break-words mt-1.5 leading-snug">${item.skuDesc}</p>
+                                <p class="text-[10px] text-slate-600 font-bold mt-2 pt-2 border-t border-slate-200"><i class="fa-solid fa-layer-group text-slate-400"></i> MC Lvl 4: <span class="font-mono text-slate-800 font-black">${item.mcLevel}</span></p>
+                            </div>
+                            <div class="flex justify-between items-center mt-2.5">
+                                <span class="${tujuanBadge} text-white px-2 py-1 rounded font-black text-[9px] shadow-sm uppercase flex items-center gap-1.5">
+                                    ${getTujuanIcon(item.tujuan)} ${item.tujuan} <span class="opacity-50">|</span> ${getPengirimanIcon(item.pengiriman)} ${item.pengiriman}
+                                </span>
+                                <span class="font-black text-emerald-700 text-xs bg-emerald-50 px-2 py-1 rounded border border-emerald-200 flex items-center gap-1.5"><i class="fa-solid fa-money-bill-wave text-emerald-500"></i> Rp ${Number(item.totalHarga||0).toLocaleString('id-ID')}</span>
+                            </div>
+                            ${textKeteranganUpdate}
+                            <div class="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-[10px]">
+                                <span class="font-bold text-slate-500 flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> ${formatIndoDate(item.timestamp)}</span>
+                                <button onclick="openDetailModal('${item.id}')" class="bg-sky-100 hover:bg-sky-200 border border-sky-200 text-blue-800 font-black py-1.5 px-3 rounded-lg text-xs shadow-sm transition-colors flex items-center gap-1.5"><i class="fa-solid fa-robot"></i> Proses</button>
+                            </div>
+                        </div>`;
+                    }
+                }).join('');
+            } catch (err) {
+                console.error("Render cards error:", err);
+                grid.innerHTML = `<div class="col-span-full py-8 text-center bg-rose-50 rounded-xl border border-rose-200"><i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 mb-3"></i><p class="text-xs text-rose-700 font-bold">Terjadi kesalahan format data saat memuat. Sistem akan segera pulih...</p></div>`;
+            }
+        }
+
+        function resetDateFilter() { 
+            if(fpInstance) fpInstance.clear(); 
+            isViewAll = false; 
+            const btn = document.getElementById('btnViewAll');
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-list-ul"></i> View All';
+                btn.className = 'px-4 py-2 bg-brand-100 hover:bg-brand-200 text-brand-800 font-black rounded-lg text-xs transition-colors flex-1 sm:flex-none shadow-sm border border-brand-200';
+            }
+            renderRequestCards(); 
+        }
+        
+        function toggleViewAll() { 
+            isViewAll = !isViewAll; 
+            const btn = document.getElementById('btnViewAll');
+            if (btn) {
+                if (isViewAll) {
+                    btn.innerHTML = '<i class="fa-solid fa-eye text-brand-700"></i> Viewing All';
+                    btn.className = 'px-4 py-2 bg-brand-200 hover:bg-brand-300 text-brand-900 font-black rounded-lg text-xs transition-colors flex-1 sm:flex-none shadow-inner border border-brand-400/50 btn-view-all-active';
+                } else {
+                    btn.innerHTML = '<i class="fa-solid fa-list-ul"></i> View All';
+                    btn.className = 'px-4 py-2 bg-brand-100 hover:bg-brand-200 text-brand-800 font-black rounded-lg text-xs transition-colors flex-1 sm:flex-none shadow-sm border border-brand-200';
+                }
+            }
+            renderRequestCards(); 
+        }
+
+        function openDetailModal(id) {
+            let item = requestsList.find(r => r.id === id);
+            let isCust = false;
+            let tujuanAsli = '';
+
+            if (item) {
+                tujuanAsli = item.tujuan;
+            } else {
+                item = custToleRequestsList.find(r => r.id === id);
+                isCust = true;
+                tujuanAsli = 'Req Cust';
+            }
+            
+            if (!item) return; 
+            activeDetailReqId = id;
+            
+            let displayedBin = getMultiBinCode(item.skuCode);
+            if (displayedBin === 'N/A' && item.binCode !== '-') displayedBin = item.binCode;
+
+            const mbinc = document.getElementById('mBinCode'); if(mbinc) mbinc.innerHTML = `<i class="fa-solid fa-boxes-stacked"></i> BIN: ${displayedBin}`;
+            const mskuc = document.getElementById('mSkuCode'); if(mskuc) mskuc.innerText = item.skuCode;
+            const mskud = document.getElementById('mSkuDesc'); if(mskud) mskud.innerText = item.skuDesc;
+            const mmcl = document.getElementById('mMcLevel'); if(mmcl) mmcl.innerText = item.mcLevel;
+            
+            const mq = document.getElementById('mQty'); if(mq) mq.innerText = item.qty;
+            const mhs = document.getElementById('mHargaSatuan'), mhsbox = document.getElementById('mHargaSatuanBox'); 
+            const mth = document.getElementById('mTotalHarga'), mthbox = document.getElementById('mTotalHargaBox');
+
+            if (isCust) {
+                if(mhsbox) mhsbox.classList.add('hidden'); if(mthbox) mthbox.classList.add('hidden');
+            } else {
+                if(mhsbox) mhsbox.classList.remove('hidden'); if(mthbox) mthbox.classList.remove('hidden');
+                if(mhs) mhs.innerText = `Rp ${Number(item.hargaSatuan||0).toLocaleString('id-ID')}`;
+                if(mth) mth.innerText = `Rp ${Number(item.totalHarga||0).toLocaleString('id-ID')}`;
+            }
+
+            const statusSelect = document.getElementById('modalStatusSelect');
+            if(statusSelect) {
+                let stts = [];
+                if (tujuanAsli === 'Retur') {
+                    stts = ['Waiting Process', 'Ready', 'Keep', 'Damage', 'Kosong', 'Cancel', 'Done STO', 'Lainnya'];
+                } else if (tujuanAsli === 'Endless Aisle') {
+                    stts = ['Waiting Process', 'Ready', 'Keep', 'Damage', 'Kosong', 'Cancel', 'Done Transaksi', 'Lainnya'];
+                } else {
+                    stts = ['Waiting Process', 'Done Ambil', 'Di Lorong', 'Di kasir', 'No Stock', 'Cancel', 'Lainnya'];
+                }
+                statusSelect.innerHTML = stts.map(s => `<option value="${s}" ${item.status===s?'selected':''}>${getStatusEmoji(s)} ${s}</option>`).join('');
+            }
+
+            const mik = document.getElementById('modalInputKeterangan'); if(mik) mik.value = item.keteranganProses || '';
+            const minost = document.getElementById('modalInputNoSto'); if(minost) minost.value = item.noSto || '';
+            onModalStatusChange();
+
+            const processBox = document.getElementById('internalProcessBox');
+            if (processBox) { if (isAdminMode) processBox.classList.remove('hidden'); else processBox.classList.add('hidden'); }
+
+            const modal = document.getElementById('detailModal'), content = document.getElementById('detailModalContent');
+            if(modal && content) { modal.classList.remove('hidden'); requestAnimationFrame(() => content.classList.remove('scale-95', 'opacity-0')); }
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal'), content = document.getElementById('detailModalContent');
+            if(content) content.classList.add('scale-95', 'opacity-0'); 
+            if(modal) setTimeout(() => modal.classList.add('hidden'), 150);
+            activeDetailReqId = null;
+        }
+
+        function onModalStatusChange() {
+            const statusSelect = document.getElementById('modalStatusSelect');
+            const stoContainer = document.getElementById('modalStoContainer');
+            const ketLabel = document.getElementById('modalKetLabel');
+            if(!statusSelect) return;
+            
+            let item = requestsList.find(r => r.id === activeDetailReqId) || custToleRequestsList.find(r => r.id === activeDetailReqId);
+            if(!item) return;
+
+            if(stoContainer) { 
+                if(statusSelect.value === 'Done STO') stoContainer.classList.remove('hidden'); 
+                else stoContainer.classList.add('hidden'); 
+            }
+            
+            if (ketLabel) {
+                let tujuan = item.tujuan || 'Req Cust'; 
+                if (activeDetailReqId && String(activeDetailReqId).startsWith('CUST')) tujuan = 'Req Cust';
+                
+                if (statusSelect.value === 'Lainnya' && tujuan === 'Req Cust') {
+                    ketLabel.innerHTML = `<i class="fa-solid fa-comment-dots text-amber-600"></i> Update Keterangan <span class="text-rose-600 font-black">* (Wajib)</span>`;
+                } else {
+                    ketLabel.innerHTML = `<i class="fa-solid fa-comment-dots text-amber-600"></i> Update Keterangan <span class="text-slate-400 font-normal">(Opsional)</span>`;
+                }
+            }
+        }
+
+        function updateRequestStatus() {
+            if (!activeDetailReqId || !isAdminMode) return; 
+            let item = requestsList.find(r => r.id === activeDetailReqId) || custToleRequestsList.find(r => r.id === activeDetailReqId);
+            if (!item) return;
+
+            const inputKetEl = document.getElementById('modalInputKeterangan');
+            const inputNoStoEl = document.getElementById('modalInputNoSto');
+            const statusSelect = document.getElementById('modalStatusSelect');
+            if(!inputKetEl || !inputNoStoEl || !statusSelect) return;
+
+            const newKet = String(inputKetEl.value).trim() || '';
+            const newNoSto = String(inputNoStoEl.value).trim() || '';
+            const newStatus = statusSelect.value || 'Waiting Process';
+
+            let tujuan = item.tujuan || 'Req Cust';
+            if (String(activeDetailReqId).startsWith('CUST')) tujuan = 'Req Cust';
+            
+            if (newStatus === 'Lainnya' && tujuan === 'Req Cust' && !newKet) {
+                return showToast('⚠️ Gagal', 'Keterangan wajib diisi untuk status Lainnya (Req Cust).', true);
+            }
+            if (newStatus === 'Done STO' && !newNoSto) return showToast('⚠️ Gagal', 'Nomor STO wajib diisi.', true);
+
+            pendingUpdates[item.id] = { status: newStatus, keteranganProses: newKet, noSto: newNoSto, timestamp: Date.now() };
+            item.status = newStatus; item.keteranganProses = newKet; item.noSto = newNoSto;
+
+            saveDataToCache(); closeDetailModal(); renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator(); 
+            showToast('✅ Berhasil', 'Status diperbarui.');
+            pushDataToBackend({ action: "update", id: item.id, status: newStatus, keteranganProses: newKet, noSto: newNoSto });
+        }
+
+        function deleteRequest(reqId) {
+            if (!isAdminMode) return;
+            requestsList = requestsList.filter(r => r.id !== reqId); custToleRequestsList = custToleRequestsList.filter(r => r.id !== reqId);
+            saveDataToCache(); renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator();
+            showToast('🗑️ Dihapus', 'Data telah dihapus.');
+            pushDataToBackend({ action: "delete", id: reqId });
+        }
+
+        function updateDashboard() {
+            try {
+                const allReqs = [...requestsList, ...custToleRequestsList];
+                const returList = allReqs.filter(r => r.tujuan === 'Retur'), eaList = allReqs.filter(r => r.tujuan === 'Endless Aisle'), custList = allReqs.filter(r => r.tujuan === 'Req Cust');
+                
+                const elTotal = document.getElementById('dash-total-count'); if(elTotal) elTotal.innerText = allReqs.length;
+                const elRetTot = document.getElementById('dash-retur-total'); if(elRetTot) elRetTot.innerText = `Rp ${returList.reduce((acc, cur) => acc + (cur.totalHarga||0), 0).toLocaleString('id-ID')}`;
+                const elRetCnt = document.getElementById('dash-retur-count'); if(elRetCnt) elRetCnt.innerText = `${returList.length} Req`;
+                const elEaTot = document.getElementById('dash-ea-total'); if(elEaTot) elEaTot.innerText = `Rp ${eaList.reduce((acc, cur) => acc + (cur.totalHarga||0), 0).toLocaleString('id-ID')}`;
+                const elEaCnt = document.getElementById('dash-ea-count'); if(elEaCnt) elEaCnt.innerText = `${eaList.length} Req`;
+                const elCustTot = document.getElementById('dash-cust-total'); if(elCustTot) elCustTot.innerText = `Rp ${custList.reduce((acc, cur) => acc + (cur.totalHarga||0), 0).toLocaleString('id-ID')}`;
+                const elCustCnt = document.getElementById('dash-cust-count'); if(elCustCnt) elCustCnt.innerText = `${custList.length} Req`;
+                const elWait = document.getElementById('dash-waiting-count'); if(elWait) elWait.innerText = allReqs.filter(r => r.status === 'Waiting Process').length;
+
+                let warningReturList = returList.filter(r => r.status !== 'Waiting Process' && !['Done STO', 'Cancel'].includes(r.status));
+                let warningEAList = eaList.filter(r => r.status !== 'Waiting Process' && !['Done Transaksi', 'Cancel'].includes(r.status));
+                
+                const elWarnCnt = document.getElementById('dash-warning-count'); if(elWarnCnt) elWarnCnt.innerText = warningReturList.length + warningEAList.length;
+                const elWarnRet = document.getElementById('dash-warning-retur'); if(elWarnRet) elWarnRet.innerText = `Retur: ${warningReturList.length}`;
+                const elWarnEa = document.getElementById('dash-warning-ea'); if(elWarnEa) elWarnEa.innerText = `EA: ${warningEAList.length}`;
+
+                renderCharts(allReqs); 
+                renderTopSiteTable(allReqs);
+                renderTopSkuTable(); 
+                renderTopSkuCustTable();
+            } catch (err) {
+                console.error("Dashboard error:", err);
+            }
+        }
+
+        function renderCharts(allReqs) {
+            if (typeof Chart === 'undefined') return;
+            
+            const commonChartOptions = {
+                plugins: { legend: { display: false } },
+                scales: { 
+                    x: { ticks: { font: { family: "'Roboto Mono', monospace", weight: 'bold', size: 10 } } },
+                    y: { ticks: { font: { family: "'Roboto Mono', monospace", weight: 'bold', size: 10 } } }
+                },
+                maintainAspectRatio: false, responsive: true
+            };
+
+            const allPossibleStatuses = ['Waiting Process', 'Ready', 'Done Ambil', 'Di Lorong', 'Di kasir', 'Keep', 'Done STO', 'Done Transaksi', 'Damage', 'Kosong', 'No Stock', 'Cancel', 'Lainnya'];
+            const statusMap = {}; allPossibleStatuses.forEach(s => statusMap[s] = 0);
+            allReqs.forEach(r => { const s = r.status || 'Waiting Process'; if(statusMap[s] !== undefined) statusMap[s] += 1; else statusMap[s] = 1; });
+            
+            const filteredStatusLabels = Object.keys(statusMap).filter(k => statusMap[k] > 0);
+            const filteredStatusData = filteredStatusLabels.map(k => statusMap[k]);
+            const colorPalette = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f43f5e', '#14b8a6', '#f97316', '#6366f1', '#84cc16', '#eab308', '#ec4899'];
+            const dynamicColors = filteredStatusLabels.map((_, idx) => colorPalette[idx % colorPalette.length]);
+
+            try {
+                const canvasStatus = document.getElementById('chartStatusPerformance');
+                if (canvasStatus) {
+                    const ctx = canvasStatus.getContext('2d');
+                    if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
+                    chartStatusInstance = new Chart(ctx, {
+                        type: 'bar', data: { labels: filteredStatusLabels, datasets: [{ label: 'Jumlah', data: filteredStatusData, backgroundColor: dynamicColors }] }, options: commonChartOptions
+                    });
+                }
+            } catch(e) {}
+
+            const pengirimanMap = {}; 
+            allReqs.forEach(r => { 
+                if(r.tujuan === 'Req Cust') return;
+                const p = r.pengiriman || 'CSS JNE'; pengirimanMap[p] = (pengirimanMap[p]||0) + 1; 
+            });
+            const pKeys = Object.keys(pengirimanMap).sort((a,b)=>pengirimanMap[b]-pengirimanMap[a]);
+            try {
+                const canvasPengiriman = document.getElementById('chartPengiriman');
+                if (canvasPengiriman) {
+                    const ctx = canvasPengiriman.getContext('2d');
+                    if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
+                    chartPengirimanInstance = new Chart(ctx, {
+                        type: 'bar', 
+                        data: { 
+                            labels: pKeys, 
+                            datasets: [{ label: 'Total', data: pKeys.map(k=>pengirimanMap[k]), backgroundColor: ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4'] }] 
+                        }, 
+                        options: commonChartOptions
+                    });
+                }
+            } catch(e) {}
+
+            function parseCustomDate(timeStr) {
+                if (!timeStr || timeStr === '-') return new Date();
+                let d = new Date(timeStr);
+                if (!isNaN(d.getTime())) return d;
+                const parts = String(timeStr).split(' ');
+                if (parts.length < 2) return new Date();
+                const dmy = parts[0].split('-');
+                const hm = parts[1].split(':');
+                if (dmy.length === 3 && hm.length >= 2) return new Date(dmy[2], parseInt(dmy[1]) - 1, dmy[0], hm[0], hm[1], hm[2]||0);
+                return new Date();
+            }
+
+            const calcAvgMin = (filterFn, cacheKey) => {
+                let pending = allReqs.filter(r => r.status === 'Waiting Process' && filterFn(r));
+                if(!pending.length) {
+                    return parseFloat(localStorage.getItem('avgTime_' + cacheKey)) || 0;
+                }
+                let totalMin = 0; const now = new Date();
+                pending.forEach(r => {
+                    let diff = (now - parseCustomDate(r.timestamp)) / 60000;
+                    if(diff < 0) diff = 0; 
+                    totalMin += diff;
+                });
+                const avg = totalMin / pending.length;
+                localStorage.setItem('avgTime_' + cacheKey, avg);
+                return avg;
+            };
+            
+            const formatTimeDetail = (totalMin) => {
+                if (totalMin <= 0) return "0 Mnt";
+                const h = Math.floor(totalMin / 60);
+                const m = Math.floor(totalMin % 60);
+                const s = Math.floor((totalMin * 60) % 60);
+                if (h > 0) return `${h}j ${m}m ${s}d`;
+                return `${m}m ${s}d`;
+            };
+
+            const dataTungguMin = [
+                calcAvgMin(r=>r.tujuan==='Retur', 'retur'), 
+                calcAvgMin(r=>r.tujuan==='Endless Aisle', 'ea'), 
+                calcAvgMin(r=>r.tujuan==='Req Cust', 'cust')
+            ];
+            let maxMin = Math.max(...dataTungguMin);
+            
+            try {
+                const canvasAvg = document.getElementById('chartAvgTime');
+                if (canvasAvg) {
+                    const ctx = canvasAvg.getContext('2d');
+                    if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
+                    chartAvgTimeInstance = new Chart(ctx, {
+                        type: 'line', 
+                        data: { 
+                            labels: ['Retur', 'EA', 'Req Cust'], 
+                            datasets: [{ label: 'Waktu Tunggu', data: dataTungguMin, borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)', fill: true, tension: 0.3 }] 
+                        }, 
+                        options: { 
+                            responsive: true, 
+                            maintainAspectRatio: false, 
+                            scales: { 
+                                x: { ticks: { font: { family: "'Roboto Mono', monospace", weight: 'bold', size: 10 } } },
+                                y: { 
+                                    min: 0,
+                                    ticks: { 
+                                        font: { family: "'Roboto Mono', monospace", weight: 'bold', size: 10 },
+                                        callback: v => maxMin > 60 ? (v/60).toFixed(1) + ' Jam' : v.toFixed(0) + ' Mnt' 
+                                    } 
+                                } 
+                            }, 
+                            plugins: { 
+                                legend: { display: false }, 
+                                tooltip: { callbacks: { label: c => formatTimeDetail(c.raw) } } 
+                            } 
+                        } 
+                    });
+                }
+            } catch(e) {}
+        }
+        
+        function renderTopSiteTable(allReqs) {
+            const tbody = document.getElementById('dash-top-site-body'); if (!tbody) return;
+            const siteMap = {}; 
+            allReqs.forEach(r => { 
+                if(r.tujuan === 'Req Cust') return; 
+                const sCode = String(r.kodeSite || 'UNK'); 
+                if(!siteMap[sCode]) siteMap[sCode] = { kode: sCode, name: r.siteName, branch: r.branch, qty: 0, total: 0 }; 
+                siteMap[sCode].qty += (r.qty || 0); 
+                siteMap[sCode].total += (r.totalHarga || 0); 
+            });
+            const top = Object.values(siteMap).sort((a,b)=>b.qty-a.qty).slice(0,5);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr>
+                <td class="p-2.5 font-black text-slate-500">#${idx+1}</td>
+                <td class="p-2.5 font-mono text-brand-600">${i.kode}</td>
+                <td class="p-2.5 font-bold text-slate-800 max-w-[200px] truncate" title="${i.name}">${i.name}</td>
+                <td class="p-2.5 font-black text-slate-600">${i.branch||'-'}</td>
+                <td class="p-2.5 text-right font-black">${i.qty}</td>
+                <td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td>
+            </tr>`).join('') : `<tr><td colspan="6" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
+        }
+
+        function renderTopSkuTable() {
+            const tbody = document.getElementById('dash-top-sku-body'); if (!tbody) return;
+            const skuMap = {}; 
+            requestsList.forEach(r => { 
+                const sku = String(r.skuCode || 'UNK'); 
+                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0 }; 
+                skuMap[sku].qty += (r.qty || 0); 
+                skuMap[sku].total += (r.totalHarga || 0); 
+            });
+            const top = Object.values(skuMap).sort((a,b)=>b.qty-a.qty).slice(0,5);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-2.5 font-black text-slate-500">#${idx+1}</td><td class="p-2.5 font-mono text-amber-600">${i.sku}</td><td class="p-2.5 max-w-[150px] truncate" title="${i.desc}">${i.desc}</td><td class="p-2.5 font-black text-slate-700">${i.mc||'-'}</td><td class="p-2.5 text-center font-mono">${getMultiBinCode(i.sku)}</td><td class="p-2.5 text-right font-black">${i.qty}</td><td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
+        }
+        
+        function renderTopSkuCustTable() {
+            const tbody = document.getElementById('dash-top-sku-cust-body'); if (!tbody) return;
+            const skuMap = {}; 
+            custToleRequestsList.forEach(r => { 
+                const sku = String(r.skuCode || 'UNK'); 
+                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0 }; 
+                skuMap[sku].qty += (r.qty || 0); 
+                skuMap[sku].total += (r.totalHarga || 0); 
+            });
+            const top = Object.values(skuMap).sort((a,b)=>b.qty-a.qty).slice(0,5);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-2.5 font-black text-slate-500">#${idx+1}</td><td class="p-2.5 font-mono text-purple-600">${i.sku}</td><td class="p-2.5 max-w-[150px] truncate" title="${i.desc}">${i.desc}</td><td class="p-2.5 font-black text-slate-700">${i.mc||'-'}</td><td class="p-2.5 text-center font-mono">${getMultiBinCode(i.sku)}</td><td class="p-2.5 text-right font-black">${i.qty}</td><td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
+        }
+
+        function openSkuModal(type) {
+            const title = document.getElementById('skuModalTitle'), tbody = document.getElementById('full-sku-body');
+            if(!title || !tbody) return;
+            title.innerHTML = type === 'retur' ? '<i class="fa-solid fa-fire text-orange-500"></i> Top SKU (Retur & EA)' : '<i class="fa-solid fa-users text-purple-500"></i> Top SKU (Req Cust)';
+            const skuMap = {}; 
+            (type === 'retur' ? requestsList : custToleRequestsList).forEach(r => { 
+                const sku = String(r.skuCode || 'UNK'); 
+                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0 }; 
+                skuMap[sku].qty += (r.qty || 0); 
+                skuMap[sku].total += (r.totalHarga || 0); 
+            });
+            const top = Object.values(skuMap).sort((a,b)=>b.qty-a.qty);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-3 font-black text-slate-500">#${idx+1}</td><td class="p-3 font-mono ${type==='retur'?'text-amber-600':'text-purple-600'}">${i.sku}</td><td class="p-3 min-w-[200px] max-w-[300px] break-words leading-snug">${i.desc}</td><td class="p-3 font-black text-slate-700">${i.mc||'-'}</td><td class="p-3 text-center font-mono">${getMultiBinCode(i.sku)}</td><td class="p-3 text-right font-black">${i.qty}</td><td class="p-3 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Kosong</td></tr>`;
+            const msku = document.getElementById('skuModal'), mskucont = document.getElementById('skuModalContent');
+            if(msku && mskucont) { msku.classList.remove('hidden'); requestAnimationFrame(()=>mskucont.classList.remove('scale-95', 'opacity-0')); }
+        }
+        
+        function closeSkuModal() { 
+            const content = document.getElementById('skuModalContent'), modal = document.getElementById('skuModal');
+            if(content) content.classList.add('scale-95', 'opacity-0'); 
+            if(modal) setTimeout(()=>modal.classList.add('hidden'), 150); 
+        }
+
+        function openWarningModal() {
+            const allReqs = [...requestsList, ...custToleRequestsList];
+            const hangingReqs = allReqs.filter(r => {
+                if (r.status === 'Waiting Process') return false;
+                if (r.tujuan === 'Retur' && !['Done STO', 'Cancel'].includes(r.status)) return true;
+                if (r.tujuan === 'Endless Aisle' && !['Done Transaksi', 'Cancel'].includes(r.status)) return true;
+                return false;
+            });
+            
+            const tbody = document.getElementById('warning-table-body');
+            if (tbody) {
+                tbody.innerHTML = hangingReqs.length ? hangingReqs.map(i => `<tr class="group hover:bg-rose-50/50 transition-colors">
+                    <td class="p-3 font-mono font-black text-brand-700 whitespace-nowrap">${i.kodeSite}</td>
+                    <td class="p-3 font-bold text-slate-800 break-words min-w-[150px]">${i.siteName}</td>
+                    <td class="p-3 font-mono text-amber-600 whitespace-nowrap">${i.skuCode}</td>
+                    <td class="p-3 max-w-[200px] break-words leading-snug">${i.skuDesc}</td>
+                    <td class="p-3 font-black text-slate-700 whitespace-nowrap">${i.mcLevel}</td>
+                    <td class="p-3 text-center font-black whitespace-nowrap">${i.qty}</td>
+                    <td class="p-3 font-black text-rose-600 whitespace-nowrap">${i.tujuan}</td>
+                    <td class="p-3 font-black text-slate-700 whitespace-nowrap"><span class="bg-white px-2 py-1 border border-slate-200 rounded shadow-sm inline-block">${getStatusIcon(i.status)} ${i.status}</span></td>
+                    <td class="p-3 font-bold text-slate-500 whitespace-nowrap">${formatIndoDate(i.timestamp)}</td>
+                    <td class="p-3 text-center sticky right-0 bg-white group-hover:bg-rose-50 transition-colors z-20 shadow-[-6px_0_12px_-4px_rgba(0,0,0,0.15)] border-l border-slate-200 min-w-[100px]">
+                        <button onclick="prosesFromWarning('${i.id}', '${i.tujuan}')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded-lg font-black text-[10px] shadow-sm transition-colors border border-rose-700 flex items-center justify-center gap-1.5 w-full whitespace-nowrap"><i class="fa-solid fa-bolt"></i> PROSES</button>
+                    </td>
+                </tr>`).join('') : `<tr><td colspan="10" class="p-5 text-center text-slate-500 font-bold text-sm"><i class="fa-solid fa-circle-check text-emerald-500 mr-2 text-lg"></i>Tidak ada peringatan. Semua data aman dan tuntas!</td></tr>`;
+            }
+            
+            const modal = document.getElementById('warningModal'), content = document.getElementById('warningModalContent');
+            if (modal && content) {
+                modal.classList.remove('hidden');
+                requestAnimationFrame(() => content.classList.remove('scale-95', 'opacity-0'));
+            }
+        }
+        
+        function closeWarningModal() {
+            const modal = document.getElementById('warningModal'), content = document.getElementById('warningModalContent');
+            if (content) content.classList.add('scale-95', 'opacity-0');
+            if (modal) setTimeout(() => modal.classList.add('hidden'), 150);
+        }
+
+        function prosesFromWarning(id, tujuan) {
+            closeWarningModal();
+            switchTab('daftar');
+            
+            let isCust = String(tujuan).toLowerCase().includes('cust');
+            setDataInputTab(isCust ? 'cust' : 'retur');
+            
+            setTimeout(() => {
+                const searchInput = document.getElementById('searchRequests');
+                if (searchInput) {
+                    searchInput.value = id;
+                    renderRequestCards();
+                }
+                openDetailModal(id);
+            }, 100);
+        }
+
+        function setMasterTab(type) {
+            activeMasterTab = type;
+            const btnSite = document.getElementById('btnMasterSite');
+            const btnArt = document.getElementById('btnMasterArtikel');
+            const btnBin = document.getElementById('btnMasterBin');
+            if(!btnSite || !btnArt || !btnBin) return;
+            
+            [btnSite, btnArt, btnBin].forEach(btn => {
+                btn.className = 'flex-1 py-2 text-[11px] sm:text-xs font-black rounded-lg text-slate-600 hover:text-slate-800 bg-transparent transition-all duration-150 flex items-center justify-center gap-1.5';
+            });
+            
+            const activeBtn = type === 'site' ? btnSite : (type === 'artikel' ? btnArt : btnBin);
+            activeBtn.className = 'flex-1 py-2 text-[11px] sm:text-xs font-black rounded-lg bg-brand-600 text-white shadow-md transition-all duration-150 flex items-center justify-center gap-1.5';
+            
+            updateMasterPlaceholder();
+        }
+
+        function updateMasterPlaceholder() {
+            const textarea = document.getElementById('modalMasterDataInput');
+            if(!textarea) return;
+            const type = activeMasterTab;
+            let header = "", existingDataStr = "";
+            
+            if (type === 'site') { 
+                header = "KODE SITE\tSITE NAME\tBRANCH\n---------------------------------\n"; 
+                existingDataStr = masterSite.slice(0, 50).map(s => `${s.kode}\t${s.name}\t${s.branch}`).join('\n'); 
+            }
+            else if (type === 'artikel') { 
+                header = "SKU CODE\tSKU DESCRIPTION\tMC LEVEL 4\tHARGA SATUAN\n---------------------------------\n"; 
+                existingDataStr = masterArtikel.slice(0, 50).map(a => `${a.sku}\t${a.desc}\t${a.mc}\t${a.price}`).join('\n'); 
+            }
+            else if (type === 'bin') { 
+                header = "SKU CODE\tBIN CODE\n---------------------------------\n"; 
+                existingDataStr = inventoryBin.slice(0, 50).map(b => `${b.sku}\t${b.bin}`).join('\n'); 
+            }
+            
+            let tail = "";
+            const totalLen = (type === 'site' ? masterSite.length : (type === 'artikel' ? masterArtikel.length : inventoryBin.length));
+            if (totalLen > 50) tail = `\n... (+${totalLen - 50} data lainnya tersimpan)`;
+            
+            textarea.value = existingDataStr.trim() === "" ? header + "(Kosong)" : header + existingDataStr + tail;
+            textarea.setAttribute('data-is-placeholder', 'true');
+        }
+        
+        function handleTextareaFocus(el) { if (el.getAttribute('data-is-placeholder') === 'true') { el.select(); el.classList.remove('text-slate-400', 'bg-slate-100'); el.classList.add('text-slate-800', 'bg-white'); } }
+        function handleTextareaInput(el) { el.setAttribute('data-is-placeholder', 'false'); el.classList.remove('text-slate-400', 'bg-slate-100'); el.classList.add('text-slate-800', 'bg-white'); }
+
+        function openMasterModal() { 
+            if(!isAdminMode) return; 
+            setMasterTab('site');
+            const mmodal = document.getElementById('masterDataModal'), mmodalcont = document.getElementById('masterDataModalContent');
+            if(mmodal && mmodalcont) { mmodal.classList.remove('hidden'); requestAnimationFrame(()=>mmodalcont.classList.remove('scale-95', 'opacity-0')); }
+        }
+        
+        function closeMasterModal() { 
+            const mmodalcont = document.getElementById('masterDataModalContent'), mmodal = document.getElementById('masterDataModal');
+            if(mmodalcont) mmodalcont.classList.add('scale-95', 'opacity-0'); 
+            if(mmodal) setTimeout(()=>mmodal.classList.add('hidden'), 150); 
+        }
+
+        async function processMasterDataUpdate() {
+            if(!isAdminMode) return;
+            const textarea = document.getElementById('modalMasterDataInput');
+            if(!textarea) return;
+            const type = activeMasterTab;
+            const text = textarea.value.trim();
+            
+            if (!text || text.includes("---------------------------------")) return showToast('⚠️ Gagal', 'Paste data baru untuk menimpa.', true);
+            
+            const pToast = document.getElementById('persistentLoadingToast');
+            if(pToast) { pToast.classList.remove('hidden'); requestAnimationFrame(()=>pToast.classList.remove('opacity-0')); }
+
+            try {
+                const rows = text.split(/\r?\n/).filter(line => !line.includes('---') && !line.includes('KODE SITE') && !line.includes('SKU CODE')).map(line => line.split('\t'));
+                if (type === 'site') masterSite = rows.filter(r => r[0]).map(r => ({ kode: String(r[0]||'').toUpperCase(), name: String(r[1]||''), branch: String(r[2]||'') }));
+                else if (type === 'artikel') masterArtikel = rows.filter(r => r[0]).map(r => ({ sku: String(r[0]||'').toUpperCase(), desc: String(r[1]||''), mc: String(r[2]||''), price: cleanNumberStr(r[3]) }));
+                else if (type === 'bin') inventoryBin = rows.filter(r => r[0]).map(r => ({ sku: String(r[0]||'').toUpperCase(), bin: String(r[1]||'') }));
+
+                saveDataToCache();
+                
+                const payload = { action: "updateMaster", type: type, payload: (type === 'site') ? masterSite : ((type === 'artikel') ? masterArtikel : inventoryBin) };
+                
+                await fetch(DEFAULT_WEBAPP_URL + "?t=" + new Date().getTime(), { method: 'POST', body: JSON.stringify(payload) });
+                
+                if(pToast) pToast.classList.add('hidden'); 
+                closeMasterModal();
+                showToast('✅ Selesai', 'Data master tersimpan dan tersinkronisasi.');
+            } catch (err) { 
+                if(pToast) pToast.classList.add('hidden'); 
+                showToast('❌ Gagal', 'Data hanya tersimpan lokal karena error server.', true); 
+            }
+        }
+    </script>
+</body>
+</html>
