@@ -753,22 +753,18 @@
         let artikelMapData = new Map();
         let binMapData = new Map();
 
-        let chartStatusInstance = null;
-        let chartPengirimanInstance = null;
-        let chartAvgTimeInstance = null;
-
         function buildHashMaps() {
             siteMapData.clear();
-            masterSite.forEach(s => siteMapData.set(String(s.kode).toUpperCase(), s));
+            masterSite.forEach(s => siteMapData.set(String(s.kode).trim().toUpperCase(), s));
             
             artikelMapData.clear();
-            masterArtikel.forEach(a => artikelMapData.set(String(a.sku).toUpperCase(), a));
+            masterArtikel.forEach(a => artikelMapData.set(String(a.sku).trim().toUpperCase(), a));
             
             binMapData.clear();
             inventoryBin.forEach(b => {
-                const sku = String(b.sku).toUpperCase();
+                const sku = String(b.sku).trim().toUpperCase();
                 if (!binMapData.has(sku)) binMapData.set(sku, []);
-                binMapData.get(sku).push(b.bin);
+                binMapData.get(sku).push(String(b.bin).trim());
             });
         }
 
@@ -1188,7 +1184,7 @@
 
         function getMultiBinCode(skuCode) {
             if(!skuCode) return 'N/A';
-            const sku = String(skuCode).toUpperCase();
+            const sku = String(skuCode).trim().toUpperCase();
             return binMapData.has(sku) ? binMapData.get(sku).join(' | ') : 'N/A';
         }
 
@@ -2477,9 +2473,15 @@
 
             try {
                 const rows = text.split(/\r?\n/).filter(line => !line.includes('---') && !line.includes('KODE SITE') && !line.includes('SKU CODE')).map(line => line.split('\t'));
-                if (type === 'site') masterSite = rows.filter(r => r[0]).map(r => ({ kode: String(r[0]||'').toUpperCase(), name: String(r[1]||''), branch: String(r[2]||'') }));
-                else if (type === 'artikel') masterArtikel = rows.filter(r => r[0]).map(r => ({ sku: String(r[0]||'').toUpperCase(), desc: String(r[1]||''), mc: String(r[2]||''), price: cleanNumberStr(r[3]) }));
-                else if (type === 'bin') inventoryBin = rows.filter(r => r[0]).map(r => ({ sku: String(r[0]||'').toUpperCase(), bin: String(r[1]||'') }));
+                
+                // FIXED: Menambahkan fungsi .trim() untuk memotong spasi hantu dari Excel
+                if (type === 'site') {
+                    masterSite = rows.filter(r => r[0] && String(r[0]).trim() !== '').map(r => ({ kode: String(r[0]||'').trim().toUpperCase(), name: String(r[1]||'').trim(), branch: String(r[2]||'').trim() }));
+                } else if (type === 'artikel') {
+                    masterArtikel = rows.filter(r => r[0] && String(r[0]).trim() !== '').map(r => ({ sku: String(r[0]||'').trim().toUpperCase(), desc: String(r[1]||'').trim(), mc: String(r[2]||'').trim(), price: cleanNumberStr(r[3]) }));
+                } else if (type === 'bin') {
+                    inventoryBin = rows.filter(r => r[0] && String(r[0]).trim() !== '').map(r => ({ sku: String(r[0]||'').trim().toUpperCase(), bin: String(r[1]||'').trim() }));
+                }
 
                 buildHashMaps(); 
                 saveDataToCache();
