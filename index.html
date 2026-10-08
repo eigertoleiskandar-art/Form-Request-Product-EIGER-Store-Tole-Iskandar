@@ -324,6 +324,10 @@
                                     <label class="block text-[11px] font-black text-amber-700 uppercase mb-1">Nama PIC <span class="text-rose-500">*</span></label>
                                     <input type="text" id="inputPesananPIC" oninput="updatePesananPreview()" placeholder="Input Nama RA" class="w-full px-3 py-2 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-500/30 text-xs font-bold shadow-inner bg-amber-50">
                                 </div>
+                                <div>
+                                    <label class="block text-[11px] font-black text-amber-700 uppercase mb-1">Store Tujuan Yang Diminta <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="inputPesananStore" oninput="updatePesananPreview()" placeholder="Input Nama Store Tujuan" class="w-full px-3 py-2 rounded-lg border border-amber-300 focus:ring-2 focus:ring-amber-500/30 text-xs font-bold shadow-inner bg-amber-50">
+                                </div>
                             </div>
                         </div>
 
@@ -362,17 +366,21 @@
                                         </div>
                                     </div>
                                     <div id="pesananCustPreviewData" class="hidden grid grid-cols-1 sm:grid-cols-12 gap-2 mt-2 pt-2 border-t border-amber-200/50">
-                                        <div class="sm:col-span-4">
+                                        <div class="sm:col-span-3">
                                             <label class="block text-[10px] font-black text-amber-600 uppercase mb-0.5"><i class="fa-solid fa-user"></i> Nama Customer</label>
-                                            <div id="respCustNama" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-slate-800 break-words">--</div>
+                                            <div id="respCustNama" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-slate-800 break-words text-[11px]">--</div>
                                         </div>
-                                        <div class="sm:col-span-4">
-                                            <label class="block text-[10px] font-black text-amber-600 uppercase mb-0.5"><i class="fa-solid fa-phone"></i> No Telp / WA</label>
-                                            <div id="respCustWA" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-slate-800 break-words">--</div>
+                                        <div class="sm:col-span-3">
+                                            <label class="block text-[10px] font-black text-amber-600 uppercase mb-0.5"><i class="fa-solid fa-phone"></i> Telp / WA</label>
+                                            <div id="respCustWA" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-slate-800 break-words text-[11px]">--</div>
                                         </div>
-                                        <div class="sm:col-span-4">
+                                        <div class="sm:col-span-3">
                                             <label class="block text-[10px] font-black text-amber-600 uppercase mb-0.5"><i class="fa-solid fa-user-tie"></i> Nama PIC</label>
-                                            <div id="respCustPIC" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-slate-800 break-words">--</div>
+                                            <div id="respCustPIC" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-slate-800 break-words text-[11px]">--</div>
+                                        </div>
+                                        <div class="sm:col-span-3">
+                                            <label class="block text-[10px] font-black text-amber-600 uppercase mb-0.5"><i class="fa-solid fa-store"></i> Store Tujuan</label>
+                                            <div id="respCustStore" class="px-2 py-1.5 rounded bg-amber-50 border border-amber-200 font-black text-amber-900 break-words text-[11px]">--</div>
                                         </div>
                                     </div>
                                 </div>
@@ -680,9 +688,14 @@
     <!-- Modal Warning Status (Tabel Detail Peringatan Menggantung) -->
     <div id="warningModal" class="fixed inset-0 z-[75] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-5">
         <div class="bg-white rounded-xl shadow-2xl max-w-7xl w-full overflow-hidden transform transition-all max-h-[90vh] flex flex-col scale-95 opacity-0" id="warningModalContent">
-            <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between border-b border-slate-800 shrink-0">
-                <h3 class="font-black text-sm flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Detail Peringatan Status Akhir</h3>
-                <button onclick="closeWarningModal()" class="text-slate-400 hover:text-white rounded-lg p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            <div class="bg-slate-900 text-white p-3.5 flex items-center justify-between shrink-0 border-b border-slate-800">
+                <h3 class="font-black text-xs sm:text-sm flex items-center gap-2 leading-tight"><i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Status Akhir Wajib : DONE STO / DONE TRANSAKSI / SELESAI / CANCEL.</h3>
+                <button onclick="closeWarningModal()" class="text-slate-400 hover:text-white rounded-lg p-1 shrink-0"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="bg-slate-800 p-2 flex gap-2 shrink-0 overflow-x-auto custom-scrollbar border-b border-slate-700">
+                <button onclick="switchWarningTab('retur')" id="warnTab-retur" class="px-4 py-2 bg-rose-600 text-white text-xs font-black rounded-lg shadow-md flex items-center gap-2 whitespace-nowrap transition-colors"><i class="fa-solid fa-box-archive"></i> Retur <span id="warnBadge-retur" class="bg-white text-rose-600 px-1.5 py-0.5 rounded-full text-[10px] font-black shadow-sm">0</span></button>
+                <button onclick="switchWarningTab('ea')" id="warnTab-ea" class="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white text-xs font-black rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"><i class="fa-solid fa-cart-shopping"></i> Endless Aisle <span id="warnBadge-ea" class="bg-slate-500 text-white px-1.5 py-0.5 rounded-full text-[10px] font-black shadow-sm">0</span></button>
+                <button onclick="switchWarningTab('pesanan')" id="warnTab-pesanan" class="px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white text-xs font-black rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap"><i class="fa-solid fa-bolt"></i> Pesanan Cust <span id="warnBadge-pesanan" class="bg-slate-500 text-white px-1.5 py-0.5 rounded-full text-[10px] font-black shadow-sm">0</span></button>
             </div>
             <div class="p-4 overflow-y-auto custom-scrollbar flex-1 bg-slate-50" id="warning-container">
                 <!-- HTML Tables di Injeksi lewat Javascript -->
@@ -736,7 +749,7 @@
         let activeMasterTab = 'site';
         let isPesananCustMode = false;
         let isShowingPesananCust = false;
-        let activeWarningType = 'retur'; // Menyimpan state modal warning apa yang sedang terbuka
+        let currentWarningTab = 'retur';
 
         let masterSite = [];
         let masterArtikel = [];
@@ -982,13 +995,16 @@
             const nama = document.getElementById('inputPesananNama').value || '--';
             const wa = document.getElementById('inputPesananWA').value || '--';
             const pic = document.getElementById('inputPesananPIC').value || '--';
+            const store = document.getElementById('inputPesananStore').value || '--';
             const rNama = document.getElementById('respCustNama');
             const rWA = document.getElementById('respCustWA');
             const rPIC = document.getElementById('respCustPIC');
+            const rStore = document.getElementById('respCustStore');
             
             if(rNama) rNama.innerText = nama;
             if(rWA) rWA.innerText = wa;
             if(rPIC) rPIC.innerText = pic;
+            if(rStore) rStore.innerText = store;
         }
 
         function handleRobotClick() {
@@ -1219,10 +1235,11 @@
             const rQty = document.getElementById('respCustQty');
             if(rQty) { rQty.innerText = '--'; }
             
-            const rNama = document.getElementById('respCustNama'), rWA = document.getElementById('respCustWA'), rPIC = document.getElementById('respCustPIC');
+            const rNama = document.getElementById('respCustNama'), rWA = document.getElementById('respCustWA'), rPIC = document.getElementById('respCustPIC'), rStore = document.getElementById('respCustStore');
             if(rNama) rNama.innerText = '--';
             if(rWA) rWA.innerText = '--';
             if(rPIC) rPIC.innerText = '--';
+            if(rStore) rStore.innerText = '--';
         }
 
         function calculateCustTotals() {
@@ -1358,8 +1375,9 @@
                     const nama = document.getElementById('inputPesananNama').value;
                     const wa = document.getElementById('inputPesananWA').value;
                     const pic = document.getElementById('inputPesananPIC').value;
-                    if(!nama || !wa || !pic) return showToast('⚠️ Gagal', 'Data Customer, No WA, dan Nama PIC wajib diisi!', true);
-                    keterangan = `👤 ${nama.trim()} | 📱 ${wa.trim()} | 👨‍💼 PIC: ${pic.trim()}`;
+                    const store = document.getElementById('inputPesananStore').value;
+                    if(!nama || !wa || !pic || !store) return showToast('⚠️ Gagal', 'Data Customer, No WA, Nama PIC, dan Store Tujuan wajib diisi!', true);
+                    keterangan = `👤 ${nama.trim()} | 📱 ${wa.trim()} | 👨‍💼 PIC: ${pic.trim()} | 🏪 ${store.trim()}`;
                     tujuan = 'Pesanan Cust';
                 } else {
                     const ketEl = document.getElementById('inputCustKeterangan');
@@ -1384,8 +1402,8 @@
                 const form = document.getElementById('custToleForm');
                 if(form) form.reset(); 
                 
-                const nEl = document.getElementById('inputPesananNama'), wEl = document.getElementById('inputPesananWA'), pEl = document.getElementById('inputPesananPIC');
-                if(nEl) nEl.value = ''; if(wEl) wEl.value = ''; if(pEl) pEl.value = '';
+                const nEl = document.getElementById('inputPesananNama'), wEl = document.getElementById('inputPesananWA'), pEl = document.getElementById('inputPesananPIC'), sEl = document.getElementById('inputPesananStore');
+                if(nEl) nEl.value = ''; if(wEl) wEl.value = ''; if(pEl) pEl.value = ''; if(sEl) sEl.value = '';
                 
                 resetCustResp();
                 
@@ -1594,23 +1612,40 @@
 
                 const adminWarningBanner = document.getElementById('adminWarningBanner');
                 if (isAdminMode) {
-                    if (activeDataInputTab === 'retur') {
-                        const hangingReqs = requestsList.filter(r => r.status !== 'Waiting Process' && !['Done STO', 'Done Transaksi', 'Cancel'].includes(r.status));
-                        if (hangingReqs.length > 0) {
-                            adminWarningBanner.innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-lg shadow-sm mb-4 flex items-center justify-between"><div class="flex items-start"><div class="flex-shrink-0"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i></div><div class="ml-3"><p class="text-xs text-amber-800 font-bold">Terdapat ${hangingReqs.length} permintaan yang belum berstatus akhir (Done STO / Done Transaksi / Cancel). Segera follup store bersangkutan untuk update permintaanya!</p></div></div><button onclick="openWarningModal('retur')" class="px-3 py-1.5 bg-amber-200 hover:bg-amber-300 text-amber-800 text-[11px] font-black rounded shadow-sm border border-amber-300 transition-colors shrink-0">Detail <i class="fa-solid fa-arrow-right ml-1"></i></button></div>`;
-                            adminWarningBanner.classList.remove('hidden');
-                        } else {
-                            adminWarningBanner.classList.add('hidden');
-                        }
-                    } else if (activeDataInputTab === 'cust' && isShowingPesananCust) {
-                        const targetList = custToleRequestsList.filter(r => r.tujuan === 'Pesanan Cust');
-                        const hangingPesanan = targetList.filter(r => !['Selesai', 'Cancel'].includes(r.status));
-                        if (hangingPesanan.length > 0) {
-                            adminWarningBanner.innerHTML = `<div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-lg shadow-sm mb-4 flex items-center justify-between"><div class="flex items-start"><div class="flex-shrink-0"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-0.5"></i></div><div class="ml-3"><p class="text-xs text-amber-800 font-bold">Terdapat ${hangingPesanan.length} pesanan yang belum berstatus akhir (Selesai / Cancel). Segera follup customers untuk update pesanannya!</p></div></div><button onclick="openWarningModal('pesanan')" class="px-3 py-1.5 bg-amber-200 hover:bg-amber-300 text-amber-800 text-[11px] font-black rounded shadow-sm border border-amber-300 transition-colors shrink-0">Detail <i class="fa-solid fa-arrow-right ml-1"></i></button></div>`;
-                            adminWarningBanner.classList.remove('hidden');
-                        } else {
-                            adminWarningBanner.classList.add('hidden');
-                        }
+                    const allReqsForWarning = [...requestsList, ...custToleRequestsList];
+                    const wReturList = allReqsForWarning.filter(r => r.tujuan === 'Retur' && r.status !== 'Waiting Process' && !['Done STO', 'Cancel'].includes(r.status));
+                    const wEAList = allReqsForWarning.filter(r => r.tujuan === 'Endless Aisle' && r.status !== 'Waiting Process' && !['Done Transaksi', 'Cancel'].includes(r.status));
+                    const wPesananList = allReqsForWarning.filter(r => r.tujuan === 'Pesanan Cust' && !['Selesai', 'Cancel'].includes(r.status));
+                    
+                    const totalWarning = wReturList.length + wEAList.length + wPesananList.length;
+
+                    if (totalWarning > 0) {
+                        adminWarningBanner.innerHTML = `
+                            <div class="bg-white border-l-4 border-l-rose-500 p-3 sm:p-4 rounded-xl shadow-sm mb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 w-full border border-slate-200">
+                                <div class="flex items-start sm:items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center shrink-0">
+                                        <i class="fa-solid fa-triangle-exclamation text-rose-500 text-lg animate-pulse"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-baseline gap-2">
+                                            <h3 class="text-lg font-black text-rose-600">${totalWarning}</h3>
+                                            <p class="text-[11px] font-black text-slate-600 uppercase tracking-wide">Peringatan Status Menggantung</p>
+                                        </div>
+                                        <div class="flex flex-wrap gap-2 mt-0.5 text-[10px] font-bold text-slate-500">
+                                            <span>Retur: ${wReturList.length}</span>
+                                            <span class="text-slate-300">|</span>
+                                            <span>EA: ${wEAList.length}</span>
+                                            <span class="text-slate-300">|</span>
+                                            <span>Pesanan: ${wPesananList.length}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button onclick="openWarningModal('retur')" class="w-full sm:w-auto px-4 py-2.5 bg-rose-100 hover:bg-rose-200 text-rose-700 font-black rounded-lg text-xs shadow-sm border border-rose-200 transition-colors flex items-center justify-center gap-2 shrink-0">
+                                    <i class="fa-solid fa-expand"></i> Detail
+                                </button>
+                            </div>
+                        `;
+                        adminWarningBanner.classList.remove('hidden');
                     } else {
                         adminWarningBanner.classList.add('hidden');
                     }
@@ -1697,12 +1732,15 @@
                         let isPesananCard = item.tujuan === 'Pesanan Cust';
                         
                         if (isPesananCard) {
-                            let cNama = '--', cWA = '--', cPIC = '--';
+                            let cNama = '--', cWA = '--', cPIC = '--', cStore = '--';
                             const kParts = item.keterangan.split(' | ');
                             if(kParts.length >= 3) {
                                 cNama = kParts[0].replace('👤 ', '');
                                 cWA = kParts[1].replace('📱 ', '');
                                 cPIC = kParts[2].replace('👨‍💼 PIC: ', '');
+                            }
+                            if(kParts.length >= 4) {
+                                cStore = kParts[3].replace('🏪 ', '');
                             }
 
                             return groupHtml + `<div class="bg-amber-50/20 border-amber-200 rounded-xl border shadow-sm p-3.5 pb-12 flex flex-col justify-between relative text-sm">
@@ -1719,10 +1757,11 @@
                                         <p class="text-slate-600 font-bold"><i class="fa-solid fa-layer-group text-amber-500 w-3"></i> MC Lvl 4: <span class="font-mono text-slate-800 font-black">${item.mcLevel}</span></p>
                                     </div>
                                 </div>
-                                <div class="bg-white border-amber-200 p-2.5 rounded-lg border mt-2.5 shadow-sm space-y-1 text-[11px]">
+                                <div class="bg-white border-amber-200 p-2.5 rounded-lg border mt-2.5 shadow-sm space-y-1.5 text-[11px]">
                                     <div class="flex items-start gap-2"><i class="fa-solid fa-user text-amber-500 mt-0.5 w-3 text-center"></i><span class="font-black text-slate-800">${cNama}</span></div>
                                     <div class="flex items-start gap-2"><i class="fa-solid fa-phone text-amber-500 mt-0.5 w-3 text-center"></i><span class="font-black text-slate-800">${cWA}</span></div>
                                     <div class="flex items-start gap-2"><i class="fa-solid fa-user-tie text-amber-500 mt-0.5 w-3 text-center"></i><span class="font-black text-slate-800 text-[10px]">PIC: ${cPIC}</span></div>
+                                    <div class="flex items-start gap-2 pt-1.5 border-t border-amber-100"><i class="fa-solid fa-store text-amber-600 mt-0.5 w-3 text-center"></i><span class="font-black text-amber-900 text-[10px]">Tujuan: ${cStore}</span></div>
                                 </div>
                                 ${textKeteranganUpdate}
                                 <div class="absolute bottom-3 left-3.5 right-3.5 flex items-center justify-between text-[10px]">
@@ -1902,17 +1941,24 @@
                 if(inStore) inStore.value = '';
                 if(inKet) inKet.value = '';
 
+                let defaultStore = '';
+                let kParts = item.keterangan.split(' | ');
+                if (kParts.length >= 4) defaultStore = kParts[3].replace('🏪 ', '');
+
                 if (item.keteranganProses) {
                     let parts = item.keteranganProses.split('\n📝 ');
                     if (parts.length > 0) {
                         let storePart = parts[0].replace('🏪 Store: ', '');
-                        if(inStore) inStore.value = storePart;
+                        if(inStore) inStore.value = storePart !== '-' ? storePart : defaultStore;
                     }
                     if (parts.length > 1) {
-                        if(inKet) inKet.value = parts[1];
+                        if(inKet) inKet.value = parts[1] !== '-' ? parts[1] : '';
                     } else if (parts.length === 1 && !item.keteranganProses.includes('🏪')) {
                         if(inKet) inKet.value = item.keteranganProses;
+                        if(inStore) inStore.value = defaultStore;
                     }
+                } else {
+                    if(inStore) inStore.value = defaultStore;
                 }
             } else {
                 if(standardBox) standardBox.classList.remove('hidden');
@@ -2027,7 +2073,7 @@
             // Me-refresh Modal Warning (Dashboard) jika sedang terbuka, agar data hilang secara live
             const warningModal = document.getElementById('warningModal');
             if(warningModal && !warningModal.classList.contains('hidden')) {
-                openWarningModal(activeWarningType);
+                openWarningModal(currentWarningTab);
             }
         }
 
@@ -2040,7 +2086,7 @@
             
             // Me-refresh Modal Warning (Dashboard) jika sedang terbuka
             const warningModal = document.getElementById('warningModal');
-            if(warningModal && !warningModal.classList.contains('hidden')) openWarningModal(activeWarningType);
+            if(warningModal && !warningModal.classList.contains('hidden')) openWarningModal(currentWarningTab);
         }
 
         function updateDashboard() {
@@ -2270,10 +2316,10 @@
             let tbody = '';
             if (type === 'retur') {
                 thead = `<tr>
-                    <th class="p-3">Kode Site</th><th class="p-3">Site Name</th><th class="p-3">SKU Code</th>
-                    <th class="p-3 min-w-[200px]">Description</th><th class="p-3">MC Lvl 4</th><th class="p-3 text-center">Qty</th>
-                    <th class="p-3">Tujuan</th><th class="p-3">Status Saat Ini</th><th class="p-3">Tgl & Waktu</th>
-                    <th class="p-3 text-center sticky right-0 bg-rose-100 z-20 shadow-[-6px_0_12px_-4px_rgba(0,0,0,0.15)] border-l border-rose-200 min-w-[100px]">Aksi</th>
+                    <th class="p-3 whitespace-nowrap">Kode Site</th><th class="p-3 whitespace-nowrap">Site Name</th><th class="p-3 whitespace-nowrap">SKU Code</th>
+                    <th class="p-3 min-w-[200px] whitespace-nowrap">Description</th><th class="p-3 whitespace-nowrap">MC Lvl 4</th><th class="p-3 text-center whitespace-nowrap">Qty</th>
+                    <th class="p-3 whitespace-nowrap">Tujuan</th><th class="p-3 whitespace-nowrap">Status Saat Ini</th><th class="p-3 whitespace-nowrap">Tgl & Waktu</th>
+                    <th class="p-3 text-center sticky right-0 bg-rose-100 z-20 shadow-[-6px_0_12px_-4px_rgba(0,0,0,0.15)] border-l border-rose-200 min-w-[100px] whitespace-nowrap">Aksi</th>
                 </tr>`;
                 
                 tbody = data.length ? data.map(i => `<tr class="group hover:bg-rose-50/50 transition-colors">
@@ -2294,26 +2340,29 @@
                 return `<div class="overflow-x-auto custom-scrollbar w-full pb-3"><table class="w-full text-left text-[11px] min-w-[1050px]"><thead class="bg-rose-50 text-rose-700 uppercase font-black border-b border-rose-200">${thead}</thead><tbody class="divide-y divide-slate-100">${tbody}</tbody></table></div>`;
             } else {
                 thead = `<tr>
-                    <th class="p-3">SKU Code</th><th class="p-3 min-w-[200px]">SKU Desc</th><th class="p-3">MC Lvl 4</th>
-                    <th class="p-3 text-center">Qty</th><th class="p-3">Nama Cust</th><th class="p-3">No Telp/WA</th><th class="p-3">Nama PIC</th>
-                    <th class="p-3 min-w-[150px]">Store Tujuan</th><th class="p-3 min-w-[150px]">Update Ket. Pesanan</th>
-                    <th class="p-3">Status</th><th class="p-3">Tgl & Waktu</th>
-                    <th class="p-3 text-center sticky right-0 bg-amber-100 z-20 shadow-[-6px_0_12px_-4px_rgba(0,0,0,0.15)] border-l border-amber-200 min-w-[100px]">Aksi</th>
+                    <th class="p-3 whitespace-nowrap">SKU Code</th><th class="p-3 min-w-[200px] whitespace-nowrap">SKU Desc</th><th class="p-3 whitespace-nowrap">MC Lvl 4</th>
+                    <th class="p-3 text-center whitespace-nowrap">Qty</th><th class="p-3 whitespace-nowrap">Nama Cust</th><th class="p-3 whitespace-nowrap">No Telp/WA</th><th class="p-3 whitespace-nowrap">Nama PIC</th>
+                    <th class="p-3 min-w-[150px] whitespace-nowrap">Store Tujuan</th><th class="p-3 min-w-[150px] whitespace-nowrap">Update Ket. Pesanan</th>
+                    <th class="p-3 whitespace-nowrap">Status</th><th class="p-3 whitespace-nowrap">Tgl & Waktu</th>
+                    <th class="p-3 text-center sticky right-0 bg-amber-100 z-20 shadow-[-6px_0_12px_-4px_rgba(0,0,0,0.15)] border-l border-amber-200 min-w-[100px] whitespace-nowrap">Aksi</th>
                 </tr>`;
                 
                 tbody = data.length ? data.map(i => {
-                    let cNama = '--', cWA = '--', cPIC = '--';
+                    let cNama = '--', cWA = '--', cPIC = '--', cStore = '--';
                     const kParts = String(i.keterangan||'').split(' | ');
                     if(kParts.length >= 3) {
                         cNama = kParts[0].replace('👤 ', '');
                         cWA = kParts[1].replace('📱 ', '');
                         cPIC = kParts[2].replace('👨‍💼 PIC: ', '');
                     }
+                    if(kParts.length >= 4) {
+                        cStore = kParts[3].replace('🏪 ', '');
+                    }
                     
-                    let tStore = '--', tKet = '--';
+                    let tStore = cStore, tKet = '--';
                     if (i.keteranganProses) {
                         let parts = i.keteranganProses.split('\n📝 ');
-                        if (parts.length > 0) tStore = parts[0].replace('🏪 Store: ', '');
+                        if (parts.length > 0 && parts[0].includes('🏪 Store: ')) tStore = parts[0].replace('🏪 Store: ', '');
                         if (parts.length > 1) tKet = parts[1];
                         else if (!i.keteranganProses.includes('🏪')) tKet = i.keteranganProses;
                     }
@@ -2340,31 +2389,49 @@
             }
         }
 
-        function openWarningModal(type = 'retur') {
-            activeWarningType = type;
+        function switchWarningTab(tab) {
+            currentWarningTab = tab;
+            openWarningModal(tab);
+        }
+
+        function openWarningModal(forceTab = null) {
+            if (forceTab) currentWarningTab = forceTab;
             const allReqs = [...requestsList, ...custToleRequestsList];
             const container = document.getElementById('warning-container');
             if(!container) return;
             
+            const wRetur = allReqs.filter(r => r.tujuan === 'Retur' && r.status !== 'Waiting Process' && !['Done STO', 'Cancel'].includes(r.status));
+            const wEA = allReqs.filter(r => r.tujuan === 'Endless Aisle' && r.status !== 'Waiting Process' && !['Done Transaksi', 'Cancel'].includes(r.status));
+            const wPesanan = allReqs.filter(r => r.tujuan === 'Pesanan Cust' && !['Selesai', 'Cancel'].includes(r.status));
+            
+            // Update Badges
+            document.getElementById('warnBadge-retur').innerText = wRetur.length;
+            document.getElementById('warnBadge-ea').innerText = wEA.length;
+            document.getElementById('warnBadge-pesanan').innerText = wPesanan.length;
+            
+            // Update Tab Styles
+            ['retur', 'ea', 'pesanan'].forEach(t => {
+                const btn = document.getElementById(`warnTab-${t}`);
+                const badge = document.getElementById(`warnBadge-${t}`);
+                if (!btn || !badge) return;
+                
+                if (t === currentWarningTab) {
+                    btn.className = `px-4 py-2 text-white text-xs font-black rounded-lg shadow-md flex items-center gap-2 whitespace-nowrap transition-colors ${t==='retur'?'bg-rose-600':t==='ea'?'bg-blue-600':'bg-amber-600'}`;
+                    badge.className = `bg-white px-1.5 py-0.5 rounded-full text-[10px] font-black shadow-sm ${t==='retur'?'text-rose-600':t==='ea'?'text-blue-600':'text-amber-600'}`;
+                } else {
+                    btn.className = `px-4 py-2 bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white text-xs font-black rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap`;
+                    badge.className = `bg-slate-500 text-white px-1.5 py-0.5 rounded-full text-[10px] font-black shadow-sm`;
+                }
+            });
+
             let htmlContent = '';
-
-            // Bagian Retur/EA
-            if (type === 'retur' || type === 'all') {
-                const hangingRetur = allReqs.filter(r => {
-                    if (r.status === 'Waiting Process') return false;
-                    if (r.tujuan === 'Retur' && !['Done STO', 'Cancel'].includes(r.status)) return true;
-                    if (r.tujuan === 'Endless Aisle' && !['Done Transaksi', 'Cancel'].includes(r.status)) return true;
-                    return false;
-                });
-                if (type === 'all') htmlContent += `<h4 class="font-black text-xs text-slate-800 mb-2 mt-1 flex items-center gap-1.5"><i class="fa-solid fa-box-archive text-rose-500"></i> Peringatan Retur / EA</h4>`;
-                htmlContent += `<div class="bg-white rounded-lg border border-slate-200 shadow-sm w-full relative mb-6">${generateTable(hangingRetur, 'retur')}</div>`;
-            }
-
-            // Bagian Pesanan Cust
-            if (type === 'pesanan' || type === 'all') {
-                const hangingPesanan = allReqs.filter(r => r.tujuan === 'Pesanan Cust' && !['Selesai', 'Cancel'].includes(r.status));
-                if (type === 'all') htmlContent += `<h4 class="font-black text-xs text-slate-800 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-500"></i> Peringatan Pesanan Cust</h4>`;
-                htmlContent += `<div class="bg-white rounded-lg border border-slate-200 shadow-sm w-full relative mb-2">${generateTable(hangingPesanan, 'pesanan')}</div>`;
+            
+            if (currentWarningTab === 'retur') {
+                htmlContent = `<div class="bg-white rounded-lg border border-slate-200 shadow-sm w-full relative">${generateTable(wRetur, 'retur')}</div>`;
+            } else if (currentWarningTab === 'ea') {
+                htmlContent = `<div class="bg-white rounded-lg border border-slate-200 shadow-sm w-full relative">${generateTable(wEA, 'retur')}</div>`; 
+            } else if (currentWarningTab === 'pesanan') {
+                htmlContent = `<div class="bg-white rounded-lg border border-slate-200 shadow-sm w-full relative">${generateTable(wPesanan, 'pesanan')}</div>`;
             }
 
             container.innerHTML = htmlContent;
