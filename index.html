@@ -470,6 +470,7 @@
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center">
                     <p class="text-[11px] font-black text-slate-500 uppercase flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-slate-400"></i> Total Permintaan</p>
                     <h3 id="dash-total-count" class="text-xl sm:text-2xl font-black text-slate-800 mt-1.5">0</h3>
+                    <p id="dash-total-nominal" class="text-[11px] font-black text-emerald-600 mt-1 bg-emerald-50 w-fit px-2 py-0.5 rounded border border-emerald-200 shadow-sm">Rp 0</p>
                 </div>
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center border-l-4 border-l-rose-500">
                     <p class="text-[11px] font-black text-rose-600 uppercase flex items-center gap-1.5"><i class="fa-solid fa-box-archive"></i> Total Retur</p>
@@ -530,6 +531,7 @@
                                 <th class="p-2.5">Kode Site</th>
                                 <th class="p-2.5">Site Name</th>
                                 <th class="p-2.5">Branch</th>
+                                <th class="p-2.5 text-center">Frekuensi</th>
                                 <th class="p-2.5 text-right">Total Qty</th>
                                 <th class="p-2.5 text-right">Total Harga</th>
                             </tr>
@@ -552,6 +554,7 @@
                                 <th class="p-2.5">SKU Code</th>
                                 <th class="p-2.5 min-w-[200px]">Description</th>
                                 <th class="p-2.5">MC Lvl 4</th>
+                                <th class="p-2.5 text-center">Frekuensi</th>
                                 <th class="p-2.5 text-right">Total Qty</th>
                                 <th class="p-2.5 text-right">Total Harga</th>
                             </tr>
@@ -574,6 +577,7 @@
                                 <th class="p-2.5">SKU Code</th>
                                 <th class="p-2.5 min-w-[200px]">Description</th>
                                 <th class="p-2.5">MC Lvl 4</th>
+                                <th class="p-2.5 text-center">Frekuensi</th>
                                 <th class="p-2.5 text-right">Total Qty</th>
                                 <th class="p-2.5 text-right">Total Harga</th>
                             </tr>
@@ -673,6 +677,7 @@
                                     <th class="p-3">SKU Code</th>
                                     <th class="p-3 min-w-[200px]">Description</th>
                                     <th class="p-3">MC Lvl 4</th>
+                                    <th class="p-3 text-center">Frekuensi</th>
                                     <th class="p-3 text-right">Total Qty</th>
                                     <th class="p-3 text-right">Total Harga</th>
                                 </tr>
@@ -2095,6 +2100,9 @@
                 const returList = allReqs.filter(r => r.tujuan === 'Retur'), eaList = allReqs.filter(r => r.tujuan === 'Endless Aisle'),custList = allReqs.filter(r => r.tujuan === 'Req Cust' || r.tujuan === 'Pesanan Cust');
                 
                 const elTotal = document.getElementById('dash-total-count'); if(elTotal) elTotal.innerText = allReqs.length;
+                const totalNominalAll = allReqs.reduce((acc, cur) => acc + (cur.totalHarga||0), 0);
+                const elTotalNom = document.getElementById('dash-total-nominal'); if(elTotalNom) elTotalNom.innerText = `Rp ${totalNominalAll.toLocaleString('id-ID')}`;
+                
                 const elRetTot = document.getElementById('dash-retur-total'); if(elRetTot) elRetTot.innerText = `Rp ${returList.reduce((acc, cur) => acc + (cur.totalHarga||0), 0).toLocaleString('id-ID')}`;
                 const elRetCnt = document.getElementById('dash-retur-count'); if(elRetCnt) elRetCnt.innerText = `${returList.length} Req`;
                 const elEaTot = document.getElementById('dash-ea-total'); if(elEaTot) elEaTot.innerText = `Rp ${eaList.reduce((acc, cur) => acc + (cur.totalHarga||0), 0).toLocaleString('id-ID')}`;
@@ -2239,19 +2247,21 @@
             allReqs.forEach(r => { 
                 if(r.tujuan === 'Req Cust' || r.tujuan === 'Pesanan Cust') return; 
                 const sCode = String(r.kodeSite || 'UNK'); 
-                if(!siteMap[sCode]) siteMap[sCode] = { kode: sCode, name: r.siteName, branch: r.branch, qty: 0, total: 0 }; 
+                if(!siteMap[sCode]) siteMap[sCode] = { kode: sCode, name: r.siteName, branch: r.branch, qty: 0, total: 0, freq: 0 }; 
                 siteMap[sCode].qty += (r.qty || 0); 
                 siteMap[sCode].total += (r.totalHarga || 0); 
+                siteMap[sCode].freq += 1;
             });
-            const top = Object.values(siteMap).sort((a,b)=>b.qty-a.qty).slice(0,5);
+            const top = Object.values(siteMap).sort((a,b)=>b.freq-a.freq).slice(0,5);
             tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr>
                 <td class="p-2.5 font-black text-slate-500">#${idx+1}</td>
                 <td class="p-2.5 font-mono text-brand-600">${i.kode}</td>
                 <td class="p-2.5 font-bold text-slate-800 max-w-[200px] truncate" title="${i.name}">${i.name}</td>
                 <td class="p-2.5 font-black text-slate-600">${i.branch||'-'}</td>
+                <td class="p-2.5 text-center font-black text-indigo-600 bg-indigo-50/50">${i.freq}x</td>
                 <td class="p-2.5 text-right font-black">${i.qty}</td>
                 <td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td>
-            </tr>`).join('') : `<tr><td colspan="6" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
+            </tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
         }
 
         function renderTopSkuTable() {
@@ -2259,12 +2269,13 @@
             const skuMap = {}; 
             requestsList.forEach(r => { 
                 const sku = String(r.skuCode || 'UNK'); 
-                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0 }; 
+                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0, freq: 0 }; 
                 skuMap[sku].qty += (r.qty || 0); 
                 skuMap[sku].total += (r.totalHarga || 0); 
+                skuMap[sku].freq += 1;
             });
-            const top = Object.values(skuMap).sort((a,b)=>b.qty-a.qty).slice(0,5);
-            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-2.5 font-black text-slate-500">#${idx+1}</td><td class="p-2.5 font-mono text-amber-600">${i.sku}</td><td class="p-2.5 max-w-[150px] truncate" title="${i.desc}">${i.desc}</td><td class="p-2.5 font-black text-slate-700">${i.mc||'-'}</td><td class="p-2.5 text-right font-black">${i.qty}</td><td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="6" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
+            const top = Object.values(skuMap).sort((a,b)=>b.freq-a.freq).slice(0,5);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-2.5 font-black text-slate-500">#${idx+1}</td><td class="p-2.5 font-mono text-amber-600">${i.sku}</td><td class="p-2.5 max-w-[150px] truncate" title="${i.desc}">${i.desc}</td><td class="p-2.5 font-black text-slate-700">${i.mc||'-'}</td><td class="p-2.5 text-center font-black text-indigo-600 bg-indigo-50/50">${i.freq}x</td><td class="p-2.5 text-right font-black">${i.qty}</td><td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
         }
         
         function renderTopSkuCustTable() {
@@ -2273,12 +2284,13 @@
             const listToScan = custToleRequestsList; 
             listToScan.forEach(r => { 
                 const sku = String(r.skuCode || 'UNK'); 
-                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0 }; 
+                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0, freq: 0 }; 
                 skuMap[sku].qty += (r.qty || 0); 
                 skuMap[sku].total += (r.totalHarga || 0); 
+                skuMap[sku].freq += 1;
             });
-            const top = Object.values(skuMap).sort((a,b)=>b.qty-a.qty).slice(0,5);
-            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-2.5 font-black text-slate-500">#${idx+1}</td><td class="p-2.5 font-mono text-purple-600">${i.sku}</td><td class="p-2.5 max-w-[150px] truncate" title="${i.desc}">${i.desc}</td><td class="p-2.5 font-black text-slate-700">${i.mc||'-'}</td><td class="p-2.5 text-right font-black">${i.qty}</td><td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="6" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
+            const top = Object.values(skuMap).sort((a,b)=>b.freq-a.freq).slice(0,5);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-2.5 font-black text-slate-500">#${idx+1}</td><td class="p-2.5 font-mono text-purple-600">${i.sku}</td><td class="p-2.5 max-w-[150px] truncate" title="${i.desc}">${i.desc}</td><td class="p-2.5 font-black text-slate-700">${i.mc||'-'}</td><td class="p-2.5 text-center font-black text-indigo-600 bg-indigo-50/50">${i.freq}x</td><td class="p-2.5 text-right font-black">${i.qty}</td><td class="p-2.5 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Belum ada data</td></tr>`;
         }
 
         function openSkuModal(type) {
@@ -2290,12 +2302,13 @@
             
             sourceList.forEach(r => { 
                 const sku = String(r.skuCode || 'UNK'); 
-                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0 }; 
+                if(!skuMap[sku]) skuMap[sku] = { sku: sku, desc: r.skuDesc, mc: r.mcLevel, qty: 0, total: 0, freq: 0 }; 
                 skuMap[sku].qty += (r.qty || 0); 
                 skuMap[sku].total += (r.totalHarga || 0); 
+                skuMap[sku].freq += 1;
             });
-            const top = Object.values(skuMap).sort((a,b)=>b.qty-a.qty);
-            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-3 font-black text-slate-500">#${idx+1}</td><td class="p-3 font-mono ${type==='retur'?'text-amber-600':'text-purple-600'}">${i.sku}</td><td class="p-3 min-w-[200px] max-w-[300px] break-words leading-snug">${i.desc}</td><td class="p-3 font-black text-slate-700">${i.mc||'-'}</td><td class="p-3 text-right font-black">${i.qty}</td><td class="p-3 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="6" class="p-4 text-center text-slate-500">Kosong</td></tr>`;
+            const top = Object.values(skuMap).sort((a,b)=>b.freq-a.freq);
+            tbody.innerHTML = top.length ? top.map((i,idx)=>`<tr><td class="p-3 font-black text-slate-500">#${idx+1}</td><td class="p-3 font-mono ${type==='retur'?'text-amber-600':'text-purple-600'}">${i.sku}</td><td class="p-3 min-w-[200px] max-w-[300px] break-words leading-snug">${i.desc}</td><td class="p-3 font-black text-slate-700">${i.mc||'-'}</td><td class="p-3 text-center font-black text-indigo-600 bg-indigo-50/50">${i.freq}x</td><td class="p-3 text-right font-black">${i.qty}</td><td class="p-3 text-right text-emerald-600 font-bold">Rp ${Number(i.total).toLocaleString('id-ID')}</td></tr>`).join('') : `<tr><td colspan="7" class="p-4 text-center text-slate-500">Kosong</td></tr>`;
             
             requestAnimationFrame(() => {
                 const msku = document.getElementById('skuModal'), mskucont = document.getElementById('skuModalContent');
