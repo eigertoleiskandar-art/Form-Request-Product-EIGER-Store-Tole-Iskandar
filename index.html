@@ -32,7 +32,6 @@
             font-family: 'Roboto Mono', monospace; overflow-x: hidden; width: 100%; margin: 0; font-size: 13px; 
             -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-weight: 600;
         }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -74,9 +73,12 @@
                         </div>
                     </div>
                 </div>
-                <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors shadow-inner border border-slate-700 shrink-0" title="Ubah Tema (Terang/Gelap)">
-                    <i id="themeToggleIcon" class="fa-solid fa-sun text-amber-400"></i>
-                </button>
+                <div class="flex items-center gap-3">
+                    <span id="syncIndicator" class="text-[10px] font-bold text-emerald-400 hidden animate-pulse"><i class="fa-solid fa-cloud-arrow-down"></i> Sync...</span>
+                    <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors shadow-inner border border-slate-700 shrink-0" title="Ubah Tema (Terang/Gelap)">
+                        <i id="themeToggleIcon" class="fa-solid fa-sun text-amber-400"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -114,6 +116,7 @@
 
     <main class="flex-1 w-full px-3 sm:px-6 lg:px-8 py-5 overflow-x-hidden">
         
+        <!-- TAB INPUT -->
         <section id="tab-input" class="tab-content w-full space-y-5">
             <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-all w-full">
                 <div class="bg-slate-900 dark:bg-slate-950 p-3 text-white border-b border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -347,7 +350,6 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 w-full">
-                <!-- Diseragamkan Model Tampilannya -->
                 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center border-l-4 border-l-slate-600 dark:border-l-slate-400">
                     <p class="text-[11px] font-black text-slate-600 dark:text-slate-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-slate-500"></i> Total Permintaan</p>
                     <h3 id="dash-total-nominal" class="text-sm font-black text-slate-800 dark:text-slate-100 mt-1.5 break-words">Rp 0</h3>
@@ -537,7 +539,7 @@
     </div>
 
     <script>
-        // SYSTEM ANTI-CRASH PRATINJAU (SANDBOX BYPASS)
+        // BYPASS SANDBOX PREVIEW UNTUK MENCEGAH LAYAR HITAM
         window.onerror = function(msg, url, lineNo, columnNo, error) { console.warn("Sandbox Error Dicegah:", msg); return true; };
         window.onunhandledrejection = function(event) { console.warn("Unhandled promise:", event.reason); event.preventDefault(); };
 
@@ -546,9 +548,8 @@
         let isViewAll = false; let activeDataInputTab = 'retur'; let isAdminMode = false; let robotClickCount = 0; let robotClickTimer = null; let activeMasterTab = 'site'; let isPesananCustMode = false; let isShowingPesananCust = false; let currentWarningTab = 'retur';
         let chartStatusInstance = null; let chartPengirimanInstance = null; let chartAvgTimeInstance = null; let fpInstance = null;
         let masterSite = [], masterArtikel = [], inventoryBin = []; let requestsList = [], custToleRequestsList = []; let pendingUpdates = {}, activeDetailReqId = null;
-        
-        // Memori khusus untuk Anti-Ghosting Fast Delete
         let deletedReqIds = []; 
+        let isSyncing = false; // Fast Sync Lock
 
         function buildHashMaps() {
             siteMapData.clear(); masterSite.forEach(s => siteMapData.set(String(s.kode || '').trim().toUpperCase(), s));
@@ -563,7 +564,6 @@
         }
         let siteMapData = new Map(), artikelMapData = new Map(), binMapData = new Map();
 
-        // Aman dari block iframe preview Sandbox
         const StorageManager = {
             getItem: (key) => { try { return window.localStorage ? window.localStorage.getItem(key) : null; } catch(e) { return null; } },
             setItem: (key, val) => { try { if(window.localStorage) window.localStorage.setItem(key, val); } catch(e) { } }
@@ -572,7 +572,7 @@
         const originalFetch = window.fetch;
         window.fetch = async function(...args) {
             try { return await originalFetch(...args); }
-            catch(e) { console.warn("Fetch diblokir oleh sandbox, aplikasi berjalan offline mode."); return { text: async () => "" }; }
+            catch(e) { console.warn("Fetch diblokir oleh sandbox, berjalan offline mode."); return { text: async () => "" }; }
         };
 
         function toggleTheme() {
@@ -718,30 +718,37 @@
             } catch(e) {}
             loadDataFromCache(); initDashboardFilters(); refreshCoreUI();
             
-            // FULL LOAD 30 DETIK STABIL
-            fetchDataFromServer();
-            setInterval(fetchDataFromServer, 30000); 
+            // FULL LOAD (HANYA SEKALI DI AWAL)
+            fetchDataFromServer("full");
+            
+            // FAST SYNC (CEK PERMINTAAN SAJA SETIAP 3 DETIK)
+            setInterval(() => fetchDataFromServer("fast"), 3000);
             
             switchTab('input');
         });
 
-        async function fetchDataFromServer() {
+        // MESIN SINKRONISASI 2 JALUR (SUPER CEPAT)
+        async function fetchDataFromServer(mode = "fast") {
             const webUrl = DEFAULT_WEBAPP_URL; 
             if (!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return;
+            if (isSyncing) return; isSyncing = true;
+            
+            const syncIcon = document.getElementById('syncIndicator'); 
+            if (syncIcon) syncIcon.classList.remove('hidden');
+
             try {
+                const action = mode === "full" ? "read" : "syncRequests";
                 const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
-                    body: JSON.stringify({ action: "read" }), 
-                    cache: 'no-store' 
+                    method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+                    body: JSON.stringify({ action: action }), cache: 'no-store' 
                 });
-                const text = await res.text(); if (!text || text.trim().startsWith('<')) return;
-                const data = safeJSONParse(text); if (!data || !data.requestsList) return;
+                const text = await res.text(); if (!text || text.trim().startsWith('<')) throw new Error("Invalid response");
+                const data = safeJSONParse(text); if (!data || !data.requestsList) throw new Error("Invalid data");
                 
                 const tempReqList = [], tempCustList = [], serverReqIds = new Set(); 
                 data.requestsList.forEach(r => {
                     let reqId = String(r['ID Permintaan'] || r.id || ''); if (!reqId) return; 
-                    if (deletedReqIds.includes(reqId.toUpperCase())) return; // ANTI GHOSTING (Data Dihapus Tidak Akan Muncul)
+                    if (deletedReqIds.includes(reqId.toUpperCase())) return; // ANTI GHOSTING (Fast Delete)
                     
                     serverReqIds.add(reqId.toUpperCase());
                     let pending = pendingUpdates[reqId], parsedStatus = String(r['Status'] || r.status || 'Waiting Process'), parsedNoSto = String(r['No STO'] || r.noSto || ''), parsedKetProses = String(r['Keterangan Proses'] || r.keteranganProses || '');
@@ -763,13 +770,20 @@
                 
                 requestsList = newRequestsList; custToleRequestsList = newCustToleRequestsList; 
                 
-                if (data.masterSite && data.masterSite.length > 0) masterSite = data.masterSite;
-                if (data.masterArtikel && data.masterArtikel.length > 0) masterArtikel = data.masterArtikel;
-                if (data.inventoryBin && data.inventoryBin.length > 0) inventoryBin = data.inventoryBin;
+                if (mode === "full") {
+                    if (data.masterSite && data.masterSite.length > 0) masterSite = data.masterSite;
+                    if (data.masterArtikel && data.masterArtikel.length > 0) masterArtikel = data.masterArtikel;
+                    if (data.inventoryBin && data.inventoryBin.length > 0) inventoryBin = data.inventoryBin;
+                    buildHashMaps();
+                }
                 
-                buildHashMaps(); saveDataToCache();
-                if (dataChanged) { refreshCoreUI(); }
-            } catch (err) {}
+                saveDataToCache();
+                if (dataChanged) refreshCoreUI();
+            } catch (err) {} 
+            finally { 
+                isSyncing = false; 
+                if (syncIcon) setTimeout(() => syncIcon.classList.add('hidden'), 500);
+            }
         }
 
         function refreshCoreUI() { requestAnimationFrame(() => { populateStatusFilterDropdown(); renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator(); updateMasterPlaceholder(); }); }
@@ -1014,6 +1028,7 @@
             }); return `${fullPrefix}${(maxCount + 1)}`;
         }
 
+        // BACKGROUND PUSH: Mengirim perubahan tanpa loading layar
         function pushDataToBackend(payload) {
             const webUrl = DEFAULT_WEBAPP_URL; if(!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return; 
             fetch(webUrl + "?t=" + new Date().getTime(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }).catch(err => {}); 
@@ -1043,6 +1058,7 @@
                     skuCode: String(skuCode), skuDesc: String(matchedArtikel.desc), mcLevel: String(matchedArtikel.mc), binCode: String(multiBin),
                     qty: qty, hargaSatuan: cleanPrice, totalHarga: cleanPrice * qty, tujuan: tujuan, pengiriman: '-', status: initialStatus, noSto: '', keterangan: keterangan, keteranganProses: ''
                 };
+                // Optimistic UI: Update lokal detik itu juga
                 custToleRequestsList.unshift(newReq); saveDataToCache(); pushDataToBackend(newReq); 
                 
                 const form = document.getElementById('custToleForm'); if(form) form.reset(); 
@@ -1064,7 +1080,9 @@
                     skuCode: String(skuCode), skuDesc: String(matchedArtikel.desc), mcLevel: String(matchedArtikel.mc), binCode: String(multiBin),
                     qty: qty, hargaSatuan: cleanPrice, totalHarga: cleanPrice * qty, tujuan: String(tujuan), pengiriman: String(pengiriman), status: 'Waiting Process', noSto: '', keterangan: '', keteranganProses: ''
                 };
+                // Optimistic UI: Update lokal detik itu juga
                 requestsList.unshift(newReq); saveDataToCache(); pushDataToBackend(newReq);
+                
                 const form = document.getElementById('requestForm'); if(form) form.reset();
                 resetSiteResp(); resetSkuResp(); resetOtherFormResps(); refreshCoreUI(); showToast('✅ Berhasil Disubmit!', 'Permintaan tersubmit.');
             } catch (error) { showToast('❌ Gagal Mengirim', error.message, true); }
@@ -1120,6 +1138,7 @@
                 } else if (unifiedWarningBanner) unifiedWarningBanner.classList.add('hidden');
 
                 let targetList = [];
+                // Saring ID Terhapus (Anti-Ghosting)
                 let cleanRequestsList = requestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                 let cleanCustList = custToleRequestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                 
@@ -1303,6 +1322,8 @@
             pendingUpdates[item.id] = { status: newStatus, keteranganProses: newKet, noSto: newNoSto, timestamp: Date.now() };
             item.status = newStatus; item.keteranganProses = newKet; item.noSto = newNoSto;
             saveDataToCache(); closeDetailModal(); refreshCoreUI(); showToast('✅ Berhasil', 'Status diperbarui.');
+            
+            // Background push
             pushDataToBackend({ action: "update", id: item.id, status: newStatus, keteranganProses: newKet, noSto: newNoSto });
             
             const warningModal = document.getElementById('warningModal');
@@ -1311,12 +1332,18 @@
 
         function deleteRequest(reqId) {
             if (!isAdminMode) return;
+            
+            // ANTI GHOSTING (Memori Terhapus Cepat)
             deletedReqIds.push(reqId.toUpperCase());
             if(deletedReqIds.length > 500) deletedReqIds.shift();
             
+            // Hapus dari UI Secepat Kilat
             requestsList = requestsList.filter(r => r.id !== reqId); custToleRequestsList = custToleRequestsList.filter(r => r.id !== reqId);
             saveDataToCache(); refreshCoreUI(); showToast('🗑️ Dihapus', 'Data terhapus secepat kilat.');
+            
+            // Background Push Server
             pushDataToBackend({ action: "delete", id: reqId });
+            
             const warningModal = document.getElementById('warningModal');
             if(warningModal && !warningModal.classList.contains('hidden')) openWarningModal(currentWarningTab);
         }
@@ -1328,7 +1355,6 @@
                 
                 const activeReqs = requestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                 const activeCusts = custToleRequestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
-                
                 const allReqsRaw = [...activeReqs, ...activeCusts].filter(r => isAdminMode || r.tujuan !== 'Pesanan Cust');
                 
                 const filteredReqs = allReqsRaw.filter(r => {
