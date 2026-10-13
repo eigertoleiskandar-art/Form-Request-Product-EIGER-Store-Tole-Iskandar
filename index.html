@@ -33,7 +33,6 @@
             -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-weight: 600;
         }
         
-        /* Tema Scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -379,7 +378,7 @@
                         <h3 id="dash-warning-count" class="text-xl sm:text-2xl font-black text-rose-600 dark:text-rose-500 mt-1.5">0</h3>
                         <div class="flex flex-wrap gap-1.5 mt-1 text-[9px] font-bold text-slate-500 dark:text-slate-400"><span id="dash-warning-retur">Retur: 0</span> <span class="text-slate-300 dark:text-slate-600">|</span> <span id="dash-warning-ea">EA: 0</span> <span class="text-slate-300 dark:text-slate-600">|</span> <span id="dash-warning-pesanan">Pesanan: 0</span></div>
                     </div>
-                    <button onclick="openWarningModal('retur')" class="admin-only mt-3 w-full py-1.5 bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-400 font-black rounded text-[10px] shadow-sm border border-rose-200 dark:border-rose-700/50 transition-colors flex items-center justify-center gap-1.5"><i class="fa-solid fa-expand"></i> Detail Peringatan</button>
+                    <button onclick="openWarningModal('retur')" class="admin-only mt-3 w-full py-1.5 bg-rose-100 dark:bg-rose-900/40 hover:bg-rose-200 dark:hover:bg-rose-900/60 text-rose-700 dark:text-rose-400 font-black rounded text-[10px] shadow-sm border border-rose-200 dark:border-rose-700/50 transition-colors flex items-center justify-center gap-1.5"><i class="fa-solid fa-expand"></i> Detail</button>
                 </div>
             </div>
 
@@ -548,6 +547,7 @@
         let chartStatusInstance = null; let chartPengirimanInstance = null; let chartAvgTimeInstance = null; let fpInstance = null;
         let masterSite = [], masterArtikel = [], inventoryBin = []; let requestsList = [], custToleRequestsList = []; let pendingUpdates = {}, activeDetailReqId = null;
         
+        // Memori khusus untuk Anti-Ghosting Fast Delete
         let deletedReqIds = []; 
 
         function buildHashMaps() {
@@ -597,7 +597,6 @@
             else { updateThemeIcon('light'); }
         }
 
-        // Utils UI
         function getStatusEmoji(status) {
             if(!status) return 'ℹ'; const s = String(status).toLowerCase();
             if(s.includes('waiting') || s.includes('on proses')) return '⏳';
@@ -719,13 +718,59 @@
             } catch(e) {}
             loadDataFromCache(); initDashboardFilters(); refreshCoreUI();
             
-            // INITIAL FULL LOAD (Ambil Master Data)
-            initialFullLoadFromServer();
+            // FULL LOAD 30 DETIK STABIL
+            fetchDataFromServer();
+            setInterval(fetchDataFromServer, 30000); 
             
-            // FAST SYNC SETIAP 3 DETIK (HANYA REQUESTS AGAR INSTAN)
-            setInterval(() => fastSyncRequests(), 3000); 
             switchTab('input');
         });
+
+        async function fetchDataFromServer() {
+            const webUrl = DEFAULT_WEBAPP_URL; 
+            if (!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return;
+            try {
+                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+                    body: JSON.stringify({ action: "read" }), 
+                    cache: 'no-store' 
+                });
+                const text = await res.text(); if (!text || text.trim().startsWith('<')) return;
+                const data = safeJSONParse(text); if (!data || !data.requestsList) return;
+                
+                const tempReqList = [], tempCustList = [], serverReqIds = new Set(); 
+                data.requestsList.forEach(r => {
+                    let reqId = String(r['ID Permintaan'] || r.id || ''); if (!reqId) return; 
+                    if (deletedReqIds.includes(reqId.toUpperCase())) return; // ANTI GHOSTING (Data Dihapus Tidak Akan Muncul)
+                    
+                    serverReqIds.add(reqId.toUpperCase());
+                    let pending = pendingUpdates[reqId], parsedStatus = String(r['Status'] || r.status || 'Waiting Process'), parsedNoSto = String(r['No STO'] || r.noSto || ''), parsedKetProses = String(r['Keterangan Proses'] || r.keteranganProses || '');
+                    if (pending) { if (parsedStatus === pending.status) { delete pendingUpdates[reqId]; } else if (Date.now() - pending.timestamp < 180000) { parsedStatus = pending.status; parsedNoSto = pending.noSto; parsedKetProses = pending.keteranganProses; } else { delete pendingUpdates[reqId]; } }
+                    let pQty = r['Qty'] || r.qty || 1, pHarga = r['Harga Satuan'] || r.hargaSatuan || 0, pTotal = r['Total Harga'] || r.totalHarga || 0;
+                    const tTujuan = String(r['Tujuan'] || r.tujuan || '').trim(), tId = reqId.toUpperCase();
+                    let isCustType = tTujuan.toUpperCase() === 'REQ CUST' || tTujuan.toUpperCase() === 'PESANAN CUST'; if (!isCustType && (tTujuan.toUpperCase().includes('CUST') || tId.startsWith('CUST'))) { isCustType = true; }
+                    let tPengiriman = String(r['Pengiriman'] || r.pengiriman || ''); if (!tPengiriman || tPengiriman.trim() === '' || tPengiriman === '-') tPengiriman = 'CSS / JNE';
+                    const reqObj = { id: reqId, timestamp: String(r['Timestamp'] || r.timestamp || '-'), kodeSite: String(r['Kode Site'] || r.kodeSite || '-'), siteName: String(r['Site Name'] || r.siteName || '-'), branch: String(r['Branch'] || r.branch || '-'), skuCode: String(r['SKU Code'] || r.skuCode || '-'), skuDesc: String(r['SKU Description'] || r.skuDesc || '-'), mcLevel: String(r['MC Level 4'] || r.mcLevel || '-'), binCode: String(r['Bin Code'] || r.binCode || '-'), qty: Number(pQty) || 1, hargaSatuan: cleanNumberStr(pHarga), totalHarga: cleanNumberStr(pTotal), tujuan: tTujuan || (isCustType ? 'Req Cust' : 'Retur'), pengiriman: tPengiriman, status: parsedStatus, noSto: parsedNoSto, keterangan: String(r['Keterangan'] || r.keterangan || ''), keteranganProses: parsedKetProses };
+                    if (isCustType) tempCustList.push(reqObj); else tempReqList.push(reqObj);
+                });
+                
+                const now = Date.now();
+                const keepLocalReqs = requestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000) && !deletedReqIds.includes(r.id.toUpperCase()));
+                const keepLocalCust = custToleRequestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000) && !deletedReqIds.includes(r.id.toUpperCase()));
+                
+                let newRequestsList = [...keepLocalReqs, ...tempReqList.reverse()], newCustToleRequestsList = [...keepLocalCust, ...tempCustList.reverse()], dataChanged = false;
+                if (JSON.stringify(requestsList) !== JSON.stringify(newRequestsList) || JSON.stringify(custToleRequestsList) !== JSON.stringify(newCustToleRequestsList)) dataChanged = true;
+                
+                requestsList = newRequestsList; custToleRequestsList = newCustToleRequestsList; 
+                
+                if (data.masterSite && data.masterSite.length > 0) masterSite = data.masterSite;
+                if (data.masterArtikel && data.masterArtikel.length > 0) masterArtikel = data.masterArtikel;
+                if (data.inventoryBin && data.inventoryBin.length > 0) inventoryBin = data.inventoryBin;
+                
+                buildHashMaps(); saveDataToCache();
+                if (dataChanged) { refreshCoreUI(); }
+            } catch (err) {}
+        }
 
         function refreshCoreUI() { requestAnimationFrame(() => { populateStatusFilterDropdown(); renderRequestCards(); updateDashboard(); updateMenuNotificationIndicator(); updateMasterPlaceholder(); }); }
 
@@ -1026,7 +1071,6 @@
         }
 
         function updateMenuNotificationIndicator() {
-            // Anti Ghosting Filter for Notifications
             const activeReqs = requestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
             const activeCust = custToleRequestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
             
@@ -1048,56 +1092,6 @@
             toast.className = `bg-slate-900 dark:bg-slate-800 text-white p-3.5 rounded-xl shadow-xl border border-slate-700 flex items-start gap-3 transform transition-all duration-300 translate-y-4 opacity-0 pointer-events-auto max-w-sm w-full relative z-[100] text-sm`;
             toast.innerHTML = `<div class="w-8 h-8 rounded-lg text-${color}-400 bg-slate-800 dark:bg-slate-900 flex items-center justify-center shrink-0 shadow-inner border border-slate-700"><i class="fa-solid ${icon} text-base"></i></div><div class="overflow-hidden"><h5 class="font-black text-slate-100">${title}</h5><p class="text-[11px] text-slate-400 font-bold leading-tight mt-1 break-words">${message}</p></div>`;
             container.appendChild(toast); requestAnimationFrame(() => toast.classList.remove('translate-y-4', 'opacity-0')); setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4'); setTimeout(() => toast.remove(), 300); }, 3500);
-        }
-
-        // FULL LOAD: Dipanggil hanya sekali di awal untuk ambil ribuan Master Data
-        async function initialFullLoadFromServer() {
-            const webUrl = DEFAULT_WEBAPP_URL; if (!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return;
-            try {
-                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: "read" }), cache: 'no-store' });
-                const text = await res.text(); if (!text || text.trim().startsWith('<')) return;
-                const data = safeJSONParse(text); if (!data || !data.requestsList) return;
-                if (data.masterSite && data.masterSite.length > 0) masterSite = data.masterSite;
-                if (data.masterArtikel && data.masterArtikel.length > 0) masterArtikel = data.masterArtikel;
-                if (data.inventoryBin && data.inventoryBin.length > 0) inventoryBin = data.inventoryBin;
-                buildHashMaps(); saveDataToCache();
-            } catch (err) {}
-        }
-
-        // FAST SYNC: Dipanggil tiap 3 detik untuk cek pesanan baru (Cepat tanpa loading)
-        async function fastSyncRequests() {
-            const webUrl = DEFAULT_WEBAPP_URL; if (!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return;
-            try {
-                // Request khusus `syncRequests` ke Backend untuk respons instan
-                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: "syncRequests" }), cache: 'no-store' });
-                const text = await res.text(); if (!text || text.trim().startsWith('<')) return;
-                const data = safeJSONParse(text); if (!data || !data.requestsList) return;
-                
-                const tempReqList = [], tempCustList = [], serverReqIds = new Set(); 
-                data.requestsList.forEach(r => {
-                    let reqId = String(r['ID Permintaan'] || r.id || ''); if (!reqId) return; 
-                    if (deletedReqIds.includes(reqId.toUpperCase())) return; // ANTI GHOSTING
-                    
-                    serverReqIds.add(reqId.toUpperCase());
-                    let pending = pendingUpdates[reqId], parsedStatus = String(r['Status'] || r.status || 'Waiting Process'), parsedNoSto = String(r['No STO'] || r.noSto || ''), parsedKetProses = String(r['Keterangan Proses'] || r.keteranganProses || '');
-                    if (pending) { if (parsedStatus === pending.status) { delete pendingUpdates[reqId]; } else if (Date.now() - pending.timestamp < 180000) { parsedStatus = pending.status; parsedNoSto = pending.noSto; parsedKetProses = pending.keteranganProses; } else { delete pendingUpdates[reqId]; } }
-                    let pQty = r['Qty'] || r.qty || 1, pHarga = r['Harga Satuan'] || r.hargaSatuan || 0, pTotal = r['Total Harga'] || r.totalHarga || 0;
-                    const tTujuan = String(r['Tujuan'] || r.tujuan || '').trim(), tId = reqId.toUpperCase();
-                    let isCustType = tTujuan.toUpperCase() === 'REQ CUST' || tTujuan.toUpperCase() === 'PESANAN CUST'; if (!isCustType && (tTujuan.toUpperCase().includes('CUST') || tId.startsWith('CUST'))) { isCustType = true; }
-                    let tPengiriman = String(r['Pengiriman'] || r.pengiriman || ''); if (!tPengiriman || tPengiriman.trim() === '' || tPengiriman === '-') tPengiriman = 'CSS / JNE';
-                    const reqObj = { id: reqId, timestamp: String(r['Timestamp'] || r.timestamp || '-'), kodeSite: String(r['Kode Site'] || r.kodeSite || '-'), siteName: String(r['Site Name'] || r.siteName || '-'), branch: String(r['Branch'] || r.branch || '-'), skuCode: String(r['SKU Code'] || r.skuCode || '-'), skuDesc: String(r['SKU Description'] || r.skuDesc || '-'), mcLevel: String(r['MC Level 4'] || r.mcLevel || '-'), binCode: String(r['Bin Code'] || r.binCode || '-'), qty: Number(pQty) || 1, hargaSatuan: cleanNumberStr(pHarga), totalHarga: cleanNumberStr(pTotal), tujuan: tTujuan || (isCustType ? 'Req Cust' : 'Retur'), pengiriman: tPengiriman, status: parsedStatus, noSto: parsedNoSto, keterangan: String(r['Keterangan'] || r.keterangan || ''), keteranganProses: parsedKetProses };
-                    if (isCustType) tempCustList.push(reqObj); else tempReqList.push(reqObj);
-                });
-                
-                const now = Date.now();
-                const keepLocalReqs = requestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000) && !deletedReqIds.includes(r.id.toUpperCase()));
-                const keepLocalCust = custToleRequestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000) && !deletedReqIds.includes(r.id.toUpperCase()));
-                
-                let newRequestsList = [...keepLocalReqs, ...tempReqList.reverse()], newCustToleRequestsList = [...keepLocalCust, ...tempCustList.reverse()], dataChanged = false;
-                if (JSON.stringify(requestsList) !== JSON.stringify(newRequestsList) || JSON.stringify(custToleRequestsList) !== JSON.stringify(newCustToleRequestsList)) dataChanged = true;
-                requestsList = newRequestsList; custToleRequestsList = newCustToleRequestsList; saveDataToCache();
-                if (dataChanged) { refreshCoreUI(); }
-            } catch (err) {}
         }
 
         function renderRequestCards() {
@@ -1315,7 +1309,6 @@
             if(warningModal && !warningModal.classList.contains('hidden')) openWarningModal(currentWarningTab);
         }
 
-        // Fast Delete Anti-Ghosting Secepat Kilat
         function deleteRequest(reqId) {
             if (!isAdminMode) return;
             deletedReqIds.push(reqId.toUpperCase());
