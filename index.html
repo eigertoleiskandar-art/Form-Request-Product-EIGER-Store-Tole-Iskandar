@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class', // Mengaktifkan mode gelap berbasis class
+            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        brand: { 50: '#f0f7ff', 100: '#e0effe', 300: '#93c5fd', 400: '#60a5fa', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af', 800: '#1e3a8a', 900: '#1e3a8a' }
-                    },
+                    colors: { brand: { 50: '#f0f7ff', 100: '#e0effe', 300: '#93c5fd', 400: '#60a5fa', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af', 800: '#1e3a8a', 900: '#1e3a8a' } },
                     fontFamily: { sans: ['"Roboto Mono"', 'monospace'], mono: ['"Roboto Mono"', 'monospace'] }
                 }
             }
@@ -31,13 +29,8 @@
 
     <style>
         body { 
-            font-family: 'Roboto Mono', monospace; 
-            overflow-x: hidden; width: 100%; margin: 0; 
-            font-size: 13px; 
-            -webkit-font-smoothing: antialiased; 
-            -moz-osx-font-smoothing: grayscale; 
-            text-rendering: optimizeLegibility;
-            font-weight: 600;
+            font-family: 'Roboto Mono', monospace; overflow-x: hidden; width: 100%; margin: 0; font-size: 13px; 
+            -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; font-weight: 600;
         }
         
         /* Tema Scrollbar */
@@ -48,16 +41,12 @@
         
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-        
-        .modern-select {
-            transition: all 0.15s ease;
-        }
+        .modern-select { transition: all 0.15s ease; }
         
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-3px); } 100% { transform: translateY(0px); } }
         .animate-float { animation: float 3s ease-in-out infinite; }
         
         body:not(.admin-mode) .admin-only { display: none !important; }
-        
         .btn-view-all-active { background-color: #dbeafe !important; color: #1e3a8a !important; border-color: #93c5fd !important; box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05) !important; transform: translateY(1px); }
         .dark .btn-view-all-active { background-color: #1e3a8a !important; color: #dbeafe !important; border-color: #1d4ed8 !important; }
         .table-container { padding-bottom: 1rem; }
@@ -86,9 +75,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- Tombol Mode Gelap/Terang -->
                 <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors shadow-inner border border-slate-700 shrink-0" title="Ubah Tema (Terang/Gelap)">
-                    <i id="themeToggleIcon" class="fa-solid fa-moon text-slate-300"></i>
+                    <i id="themeToggleIcon" class="fa-solid fa-sun text-amber-400"></i>
                 </button>
             </div>
         </div>
@@ -137,7 +125,6 @@
                     </div>
                 </div>
 
-                <!-- Form Retur / EA -->
                 <form id="requestForm" class="p-4 sm:p-5" onsubmit="handleFormSubmit(event)">
                     <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
                         <div class="xl:col-span-5 space-y-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
@@ -217,7 +204,6 @@
                     </div>
                 </form>
 
-                <!-- Form Req Cust / Pesanan -->
                 <form id="custToleForm" class="p-4 sm:p-5 hidden" onsubmit="handleCustToleSubmit(event)">
                     <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
                         <div class="xl:col-span-5 space-y-4 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm relative">
@@ -362,7 +348,7 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 w-full">
-                <!-- Total Permintaan Card (Format diseragamkan) -->
+                <!-- Diseragamkan Model Tampilannya -->
                 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center border-l-4 border-l-slate-600 dark:border-l-slate-400">
                     <p class="text-[11px] font-black text-slate-600 dark:text-slate-400 uppercase flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-slate-500"></i> Total Permintaan</p>
                     <h3 id="dash-total-nominal" class="text-sm font-black text-slate-800 dark:text-slate-100 mt-1.5 break-words">Rp 0</h3>
@@ -552,7 +538,7 @@
     </div>
 
     <script>
-        // GLOBAL ERROR HANDLER & SANDBOX PROTECTION (Bypass Layar Hitam)
+        // SYSTEM ANTI-CRASH PRATINJAU (SANDBOX BYPASS)
         window.onerror = function(msg, url, lineNo, columnNo, error) { console.warn("Sandbox Error Dicegah:", msg); return true; };
         window.onunhandledrejection = function(event) { console.warn("Unhandled promise:", event.reason); event.preventDefault(); };
 
@@ -589,39 +575,26 @@
             catch(e) { console.warn("Fetch diblokir oleh sandbox, aplikasi berjalan offline mode."); return { text: async () => "" }; }
         };
 
-        // Theme Toggler System
         function toggleTheme() {
             const html = document.documentElement;
             if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                StorageManager.setItem('theme', 'light');
-                updateThemeIcon('light');
+                html.classList.remove('dark'); StorageManager.setItem('theme', 'light'); updateThemeIcon('light');
             } else {
-                html.classList.add('dark');
-                StorageManager.setItem('theme', 'dark');
-                updateThemeIcon('dark');
+                html.classList.add('dark'); StorageManager.setItem('theme', 'dark'); updateThemeIcon('dark');
             }
-            if (chartStatusInstance || chartPengirimanInstance || chartAvgTimeInstance) renderCharts([...requestsList, ...custToleRequestsList]); // Refresh charts colors
+            if (chartStatusInstance || chartPengirimanInstance || chartAvgTimeInstance) renderCharts([...requestsList, ...custToleRequestsList]); 
         }
 
         function updateThemeIcon(theme) {
-            const icon = document.getElementById('themeToggleIcon');
-            if (!icon) return;
-            if (theme === 'dark') {
-                icon.className = 'fa-solid fa-sun text-amber-400';
-            } else {
-                icon.className = 'fa-solid fa-moon text-slate-300';
-            }
+            const icon = document.getElementById('themeToggleIcon'); if (!icon) return;
+            if (theme === 'dark') icon.className = 'fa-solid fa-sun text-amber-400';
+            else icon.className = 'fa-solid fa-moon text-slate-300';
         }
 
         function initTheme() {
             const savedTheme = StorageManager.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-                updateThemeIcon('dark');
-            } else {
-                updateThemeIcon('light');
-            }
+            if (savedTheme === 'dark') { document.documentElement.classList.add('dark'); updateThemeIcon('dark'); } 
+            else { updateThemeIcon('light'); }
         }
 
         // Utils UI
@@ -745,7 +718,12 @@
                 if (dateRangeEl && typeof flatpickr !== 'undefined') { fpInstance = flatpickr(dateRangeEl, { mode: "range", dateFormat: "d-m-Y", onChange: function() { requestAnimationFrame(renderRequestCards); } }); }
             } catch(e) {}
             loadDataFromCache(); initDashboardFilters(); refreshCoreUI();
-            syncDataFromSheetsBackground(); setInterval(() => syncDataFromSheetsBackground(), 30000); 
+            
+            // INITIAL FULL LOAD (Ambil Master Data)
+            initialFullLoadFromServer();
+            
+            // FAST SYNC SETIAP 3 DETIK (HANYA REQUESTS AGAR INSTAN)
+            setInterval(() => fastSyncRequests(), 3000); 
             switchTab('input');
         });
 
@@ -1072,21 +1050,33 @@
             container.appendChild(toast); requestAnimationFrame(() => toast.classList.remove('translate-y-4', 'opacity-0')); setTimeout(() => { toast.classList.add('opacity-0', 'translate-y-4'); setTimeout(() => toast.remove(), 300); }, 3500);
         }
 
-        async function syncDataFromSheetsBackground() {
+        // FULL LOAD: Dipanggil hanya sekali di awal untuk ambil ribuan Master Data
+        async function initialFullLoadFromServer() {
             const webUrl = DEFAULT_WEBAPP_URL; if (!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return;
             try {
-                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: "read" }) });
+                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: "read" }), cache: 'no-store' });
                 const text = await res.text(); if (!text || text.trim().startsWith('<')) return;
                 const data = safeJSONParse(text); if (!data || !data.requestsList) return;
                 if (data.masterSite && data.masterSite.length > 0) masterSite = data.masterSite;
                 if (data.masterArtikel && data.masterArtikel.length > 0) masterArtikel = data.masterArtikel;
                 if (data.inventoryBin && data.inventoryBin.length > 0) inventoryBin = data.inventoryBin;
-                buildHashMaps();
+                buildHashMaps(); saveDataToCache();
+            } catch (err) {}
+        }
+
+        // FAST SYNC: Dipanggil tiap 3 detik untuk cek pesanan baru (Cepat tanpa loading)
+        async function fastSyncRequests() {
+            const webUrl = DEFAULT_WEBAPP_URL; if (!webUrl || webUrl.trim() === '' || webUrl.includes("TARUH_URL_APPS_SCRIPT")) return;
+            try {
+                // Request khusus `syncRequests` ke Backend untuk respons instan
+                const res = await fetch(`${webUrl}?t=${new Date().getTime()}`, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: "syncRequests" }), cache: 'no-store' });
+                const text = await res.text(); if (!text || text.trim().startsWith('<')) return;
+                const data = safeJSONParse(text); if (!data || !data.requestsList) return;
+                
                 const tempReqList = [], tempCustList = [], serverReqIds = new Set(); 
                 data.requestsList.forEach(r => {
                     let reqId = String(r['ID Permintaan'] || r.id || ''); if (!reqId) return; 
-                    // ANTI GHOSTING CHECK
-                    if (deletedReqIds.includes(reqId.toUpperCase())) return;
+                    if (deletedReqIds.includes(reqId.toUpperCase())) return; // ANTI GHOSTING
                     
                     serverReqIds.add(reqId.toUpperCase());
                     let pending = pendingUpdates[reqId], parsedStatus = String(r['Status'] || r.status || 'Waiting Process'), parsedNoSto = String(r['No STO'] || r.noSto || ''), parsedKetProses = String(r['Keterangan Proses'] || r.keteranganProses || '');
@@ -1098,8 +1088,8 @@
                     const reqObj = { id: reqId, timestamp: String(r['Timestamp'] || r.timestamp || '-'), kodeSite: String(r['Kode Site'] || r.kodeSite || '-'), siteName: String(r['Site Name'] || r.siteName || '-'), branch: String(r['Branch'] || r.branch || '-'), skuCode: String(r['SKU Code'] || r.skuCode || '-'), skuDesc: String(r['SKU Description'] || r.skuDesc || '-'), mcLevel: String(r['MC Level 4'] || r.mcLevel || '-'), binCode: String(r['Bin Code'] || r.binCode || '-'), qty: Number(pQty) || 1, hargaSatuan: cleanNumberStr(pHarga), totalHarga: cleanNumberStr(pTotal), tujuan: tTujuan || (isCustType ? 'Req Cust' : 'Retur'), pengiriman: tPengiriman, status: parsedStatus, noSto: parsedNoSto, keterangan: String(r['Keterangan'] || r.keterangan || ''), keteranganProses: parsedKetProses };
                     if (isCustType) tempCustList.push(reqObj); else tempReqList.push(reqObj);
                 });
+                
                 const now = Date.now();
-                // Anti Ghosting Filter for local keepers
                 const keepLocalReqs = requestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000) && !deletedReqIds.includes(r.id.toUpperCase()));
                 const keepLocalCust = custToleRequestsList.filter(r => !serverReqIds.has(String(r.id).toUpperCase()) && (now - new Date(r.timestamp).getTime() < 180000) && !deletedReqIds.includes(r.id.toUpperCase()));
                 
@@ -1120,7 +1110,6 @@
 
                 const unifiedWarningBanner = document.getElementById('unifiedWarningBanner');
                 if (isAdminMode) {
-                    // Filter blacklist ID terhapus
                     const activeReqs = requestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                     const activeCusts = custToleRequestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                     const allReqsForWarning = [...activeReqs, ...activeCusts];
@@ -1137,7 +1126,6 @@
                 } else if (unifiedWarningBanner) unifiedWarningBanner.classList.add('hidden');
 
                 let targetList = [];
-                // Anti Ghosting Filter
                 let cleanRequestsList = requestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                 let cleanCustList = custToleRequestsList.filter(r => !deletedReqIds.includes(r.id.toUpperCase()));
                 
@@ -1327,7 +1315,7 @@
             if(warningModal && !warningModal.classList.contains('hidden')) openWarningModal(currentWarningTab);
         }
 
-        // Fast Delete Anti-Ghosting
+        // Fast Delete Anti-Ghosting Secepat Kilat
         function deleteRequest(reqId) {
             if (!isAdminMode) return;
             deletedReqIds.push(reqId.toUpperCase());
